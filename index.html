@@ -111,13 +111,17 @@ body{font-family:'Noto Sans SC',sans-serif;display:flex;align-items:center;justi
   }
   /* Home screen top padding */
   .home-body{padding-top:env(safe-area-inset-top,0px);}
-  /* Home indicator / bottom safe area */
-  .hi{height:env(safe-area-inset-bottom,20px)!important;min-height:0!important;}
-  .hi-pill{opacity:0;}
+  /* Home indicator / bottom safe area - hide completely, no fallback white bar */
+  .hi{height:env(safe-area-inset-bottom,0px)!important;min-height:0!important;background:transparent!important;}
+  .hi-pill{display:none!important;}
   /* Chat bar above home indicator */
   .chat-bar{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;}
-  /* Diary tabs */
-  .diary-tabs{padding-top:0;}
+  /* Modal nav: avoid status bar overlap on real phones */
+  .modal-nav{
+    padding-top:calc(10px + env(safe-area-inset-top,0px))!important;
+    height:auto!important;
+    min-height:calc(56px + env(safe-area-inset-top,0px))!important;
+  }
 }
 
 .pwrap{position:relative;}
@@ -608,7 +612,7 @@ body{font-family:'Noto Sans SC',sans-serif;display:flex;align-items:center;justi
                   <div class="settings-row-label">🧠 深度思考</div>
                   <div style="font-size:12px;color:var(--text3);margin-top:2px">开启后回复更深思熟虑（需模型支持）</div>
                 </div>
-                <button class="toggle" id="thinking-toggle" onclick="toggleThinking()"><div class="toggle-knob"></div></button>
+                <button class="toggle" id="thinking-toggle" onclick="toggleThinkingTemp()"><div class="toggle-knob"></div></button>
               </div>
             </div>
           </div>
@@ -628,6 +632,15 @@ body{font-family:'Noto Sans SC',sans-serif;display:flex;align-items:center;justi
               <div class="settings-row" id="cs-bg-clear-row" style="display:none">
                 <span class="settings-row-label">移除背景</span>
                 <span style="color:#E05050;cursor:pointer;font-size:14px" onclick="clearChatBg()">移除</span>
+              </div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-title">聊天管理</div>
+            <div class="settings-group">
+              <div class="settings-row">
+                <span class="settings-row-label">🗑️ 清空聊天记录</span>
+                <button class="danger-row-btn" onclick="clearChat()">清空</button>
               </div>
             </div>
           </div>
@@ -832,16 +845,6 @@ body{font-family:'Noto Sans SC',sans-serif;display:flex;align-items:center;justi
           </div>
         </div>
 
-        <!-- 聊天管理 -->
-        <div class="settings-section">
-          <div class="settings-section-title">聊天管理</div>
-          <div class="settings-group">
-            <div class="settings-row">
-              <span class="settings-row-label">🗑️ 清空聊天记录</span>
-              <button class="danger-row-btn" onclick="clearChat()">清空</button>
-            </div>
-          </div>
-        </div>
 
       </div>
     </div>
@@ -953,7 +956,14 @@ function nav(name){
 
 function goBack(){
   if(screenStack.length<=1) return;
-  const cur=screenStack.pop();
+  const cur=screenStack[screenStack.length-1];
+  // If leaving settings without having saved, revert theme/color to last saved state
+  if(cur==='settings'){
+    loadData();
+    applyTheme();
+    loadSettingsUI();
+  }
+  screenStack.pop();
   const prev=screenStack[screenStack.length-1];
   const curEl=document.getElementById('s-'+cur);
   const prevEl=document.getElementById('s-'+prev);
@@ -979,14 +989,13 @@ function applyTheme(){
 function toggleTheme(){
   cfg.theme=cfg.theme==='light'?'dark':'light';
   applyTheme();
-  saveData();
+  // Do NOT saveData() here — only saved when user clicks 保存
 }
 
 function setColorTheme(c){
   cfg.colorTheme=c;
   applyTheme();
-  saveData();
-  showToast('主题已更换 ✓');
+  // Do NOT saveData() here — only saved when user clicks 保存
 }
 
 // =========== SETTINGS ===========
@@ -1040,9 +1049,17 @@ async function callAI(messages,systemPrompt,maxTokens){
     system:systemPrompt,
     messages
   };
-  // Thinking mode (extended thinking / DeepSeek reasoning)
+  // Thinking mode: support both Anthropic and DeepSeek API formats
   if(cfg.thinkingMode){
-    bodyObj.thinking={type:'enabled',budget_tokens:8000};
+    const url=(cfg.apiurl||'').toLowerCase();
+    const isDeepSeek=url.includes('deepseek');
+    if(isDeepSeek){
+      // DeepSeek Anthropic-compatible format
+      bodyObj.output_config={effort:'high'};
+    } else {
+      // Anthropic extended thinking format
+      bodyObj.thinking={type:'enabled',budget_tokens:8000};
+    }
     if(bodyObj.max_tokens<10000) bodyObj.max_tokens=10000;
   }
   const resp=await fetch(base+'/v1/messages',{
@@ -1410,15 +1427,22 @@ function showToast(msg){
 }
 
 // =========== CHAT SETTINGS ===========
+// Temp vars for staged edits (only committed on 保存)
+let _tmpThinking=false;
+let _tmpAvatarImg=null; // null = unchanged, '' = cleared, string = new image
+let _tmpChatBg=null;    // null = unchanged, '' = cleared, string = new bg
+
 function openChatSettings(){
+  // Snapshot current values into temp vars
+  _tmpThinking=!!cfg.thinkingMode;
+  _tmpAvatarImg=null;
+  _tmpChatBg=null;
+
   document.getElementById('cs-avatar').value=cfg.chatAvatar||'他';
   document.getElementById('cs-name').value=cfg.chatName||'他';
-  // Avatar preview
   updateAvatarPreviewUI();
-  // Thinking toggle
   const tog=document.getElementById('thinking-toggle');
-  if(tog) tog.classList.toggle('on',!!cfg.thinkingMode);
-  // BG
+  if(tog) tog.classList.toggle('on',_tmpThinking);
   const preview=document.getElementById('cs-bg-preview');
   const clearRow=document.getElementById('cs-bg-clear-row');
   if(cfg.chatBg){
@@ -1433,22 +1457,41 @@ function openChatSettings(){
 }
 
 function closeChatSettings(){
+  // Discard all staged changes
+  _tmpThinking=false;
+  _tmpAvatarImg=null;
+  _tmpChatBg=null;
   document.getElementById('chat-settings-modal').classList.remove('open');
 }
 
 function saveChatSettings(){
   cfg.chatAvatar=document.getElementById('cs-avatar').value.trim()||'他';
   cfg.chatName=document.getElementById('cs-name').value.trim()||'他';
+  // Apply staged thinking mode
+  cfg.thinkingMode=_tmpThinking;
+  // Apply staged avatar image
+  if(_tmpAvatarImg!==null) cfg.chatAvatarImg=_tmpAvatarImg;
+  // Apply staged chat bg
+  if(_tmpChatBg!==null) cfg.chatBg=_tmpChatBg;
   saveData();renderChat();
   closeChatSettings();
   showToast('聊天设置已保存 ✓');
 }
 
+// Thinking toggle in chat settings modal — only updates temp state, not cfg
+function toggleThinkingTemp(){
+  _tmpThinking=!_tmpThinking;
+  const tog=document.getElementById('thinking-toggle');
+  if(tog) tog.classList.toggle('on',_tmpThinking);
+}
+
 function updateAvatarPreviewUI(){
   const prev=document.getElementById('cs-avatar-preview');
   if(!prev) return;
-  if(cfg.chatAvatarImg){
-    prev.innerHTML=`<img src="${cfg.chatAvatarImg}" alt="" style="width:100%;height:100%;object-fit:cover">`;
+  // Use staged image if set, otherwise fall back to cfg
+  const img=(_tmpAvatarImg!==null)?_tmpAvatarImg:cfg.chatAvatarImg;
+  if(img){
+    prev.innerHTML=`<img src="${img}" alt="" style="width:100%;height:100%;object-fit:cover">`;
     document.getElementById('cs-avatar-clear').style.display='';
   }else{
     prev.innerHTML=esc(cfg.chatAvatar||'他');
@@ -1460,41 +1503,35 @@ function handleAvatarImg(input){
   if(!input.files||!input.files[0]) return;
   const reader=new FileReader();
   reader.onload=e=>{
-    cfg.chatAvatarImg=e.target.result;
-    saveData();
+    _tmpAvatarImg=e.target.result; // staged, not saved yet
     updateAvatarPreviewUI();
-    renderChat();
   };
   reader.readAsDataURL(input.files[0]);
 }
 
 function clearAvatarImg(){
-  cfg.chatAvatarImg='';
+  _tmpAvatarImg=''; // staged clear
   document.getElementById('cs-avatar-file').value='';
-  saveData();
   updateAvatarPreviewUI();
-  renderChat();
 }
 
 function previewChatBg(input){
   if(!input.files||!input.files[0]) return;
   const reader=new FileReader();
   reader.onload=e=>{
-    cfg.chatBg=e.target.result;
-    document.getElementById('cs-bg-img').src=cfg.chatBg;
+    _tmpChatBg=e.target.result; // staged, not saved yet
+    document.getElementById('cs-bg-img').src=_tmpChatBg;
     document.getElementById('cs-bg-preview').style.display='';
     document.getElementById('cs-bg-clear-row').style.display='';
-    saveData();renderChat();
   };
   reader.readAsDataURL(input.files[0]);
 }
 
 function clearChatBg(){
-  cfg.chatBg='';
+  _tmpChatBg=''; // staged clear
   document.getElementById('cs-bg-preview').style.display='none';
   document.getElementById('cs-bg-clear-row').style.display='none';
   document.getElementById('cs-bg-file').value='';
-  saveData();renderChat();
 }
 
 // =========== MEMO COMMENT ===========
