@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>他</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#CCDECE;
+  --phone:#FFFFFF;
+  --surface:#F4FAF5;
+  --surface2:#EAF4EC;
+  --acc:#4F9068;
+  --acc2:#3B7A56;
+  --accl:rgba(79,144,104,0.10);
+  --accb:#D8EDDF;
+  --text:#1A291E;
+  --text2:#6A8A72;
+  --text3:#A4BFA9;
+  --bd:rgba(79,144,104,0.12);
+  --bd2:rgba(79,144,104,0.22);
+  --nav:rgba(255,255,255,0.88);
+  --w1:#D6EBD8;
+  --w2:#C0DFC4;
+  --shadow:0 32px 72px rgba(0,50,20,0.22),0 0 0 1.5px rgba(255,255,255,0.08);
+}
+[data-theme=dark]{
+  --bg:#060F08;
+  --phone:#101A12;
+  --surface:#162018;
+  --surface2:#1C2A1E;
+  --acc:#4CCB87;
+  --acc2:#3AB676;
+  --accl:rgba(76,203,135,0.10);
+  --accb:rgba(76,203,135,0.18);
+  --text:#E2EFE5;
+  --text2:#7AAF87;
+  --text3:#4A6A52;
+  --bd:rgba(76,203,135,0.09);
+  --bd2:rgba(76,203,135,0.18);
+  --nav:rgba(16,26,18,0.90);
+  --w1:#0A1510;
+  --w2:#08110D;
+  --shadow:0 32px 72px rgba(0,0,0,0.55),0 0 0 1.5px rgba(255,255,255,0.04);
+}
+
+html,body{height:100%;background:var(--bg);transition:background .5s;}
+body{font-family:'Noto Sans SC',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+
+@media(max-width:520px){
+  body{display:block;background:none!important;}
+  .pwrap{width:100vw;height:100dvh;}
+  .phone{width:100%!important;height:100%!important;border-radius:0!important;box-shadow:none!important;}
+}
+
+.pwrap{position:relative;}
+.phone{
+  width:390px;height:844px;
+  border-radius:55px;overflow:hidden;
+  position:relative;background:var(--phone);
+  box-shadow:var(--shadow);
+  transition:background .4s;
+  display:flex;flex-direction:column;
+}
+
+/* Dynamic Island */
+.di{
+  position:absolute;top:13px;left:50%;transform:translateX(-50%);
+  width:122px;height:35px;background:#000;border-radius:20px;z-index:999;
+}
+
+/* Status bar */
+.sb{
+  height:52px;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 28px 10px;flex-shrink:0;
+  position:relative;z-index:10;transition:color .3s;
+}
+.sb-time{font-size:15px;font-weight:500;color:var(--text);}
+.sb-icons{display:flex;align-items:center;gap:5px;color:var(--text);}
+.sb-icons svg{width:16px;height:16px;fill:currentColor;}
+
+/* Screens */
+.sc-wrap{flex:1;position:relative;overflow:hidden;}
+.screen{
+  position:absolute;inset:0;background:var(--phone);
+  transform:translateX(100%);
+  transition:transform .38s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;z-index:1;
+}
+.screen.active{transform:translateX(0);z-index:10;}
+.screen.behind{transform:translateX(-22%) scale(0.96);z-index:5;}
+#s-home{
+  background:linear-gradient(165deg,var(--w1) 0%,var(--w2) 100%);
+  transform:translateX(0);z-index:1;
+}
+
+/* Home indicator */
+.hi{height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--phone);}
+.hi-pill{width:130px;height:5px;background:var(--text3);border-radius:3px;opacity:.4;}
+#s-home+*~* .hi{background:transparent;}
+
+/* === HOME === */
+.home-body{flex:1;display:flex;flex-direction:column;padding:0 0 10px;}
+.home-time{text-align:center;padding:22px 0 28px;}
+.home-clock{font-size:76px;font-weight:200;color:var(--text);letter-spacing:-4px;line-height:1;}
+.home-date{font-size:14px;color:var(--text2);margin-top:8px;font-weight:300;}
+.app-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;padding:0 36px;flex:1;align-content:center;
+}
+.app-ico{
+  display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;
+}
+.app-ico-bg{
+  width:76px;height:76px;border-radius:22px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(0,40,20,0.12);
+  transition:transform .15s;
+}
+.app-ico:active .app-ico-bg{transform:scale(0.88);}
+.app-ico-lbl{font-size:12px;color:var(--text);font-weight:400;}
+.ic-chat{background:linear-gradient(145deg,#68C48E,#4A9E72);}
+.ic-memo{background:linear-gradient(145deg,#7DC4A2,#59A882);}
+.ic-diary{background:linear-gradient(145deg,#5AB8A0,#3E9E88);}
+.ic-settings{background:linear-gradient(145deg,#A8C4AE,#86A88E);}
+
+/* === NAV BAR === */
+.nav{
+  height:56px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 20px;flex-shrink:0;
+  background:var(--nav);backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:0.5px solid var(--bd2);
+}
+.nav-title{font-size:17px;font-weight:600;color:var(--text);}
+.nav-back{display:flex;align-items:center;gap:2px;color:var(--acc);cursor:pointer;font-size:15px;min-width:60px;}
+.nav-back svg{width:20px;height:20px;stroke:var(--acc);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.nav-act{color:var(--acc);font-size:15px;cursor:pointer;min-width:60px;text-align:right;font-weight:500;}
+
+/* === SCROLLABLE BODY === */
+.s-body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+
+/* === CHAT === */
+.chat-msgs{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:16px 16px 8px;display:flex;flex-direction:column;gap:10px;
+}
+.msg{max-width:78%;padding:10px 14px;border-radius:18px;font-size:15px;line-height:1.6;word-break:break-word;}
+.msg-ai{
+  align-self:flex-start;background:var(--surface2);
+  color:var(--text);border-bottom-left-radius:5px;
+  border:0.5px solid var(--bd2);
+}
+.msg-user{
+  align-self:flex-end;background:var(--acc);
+  color:#fff;border-bottom-right-radius:5px;
+}
+.msg-typing{color:var(--text3);font-style:italic;}
+.ai-row{display:flex;gap:8px;align-items:flex-end;align-self:flex-start;max-width:85%;}
+.ai-av{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(145deg,#68C48E,#4A9E72);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;color:#fff;font-weight:500;
+}
+.chat-bar{
+  padding:10px 14px;background:var(--nav);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:0.5px solid var(--bd2);flex-shrink:0;
+  display:flex;gap:10px;align-items:flex-end;
+}
+.chat-bar textarea{
+  flex:1;padding:9px 14px;border:1px solid var(--bd2);
+  border-radius:22px;font-size:15px;font-family:inherit;
+  color:var(--text);background:var(--surface);outline:none;
+  resize:none;min-height:40px;max-height:100px;line-height:1.5;
+  transition:border-color .2s;
+}
+.chat-bar textarea:focus{border-color:var(--acc);}
+.chat-send{
+  width:40px;height:40px;border-radius:50%;background:var(--acc);
+  border:none;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .2s,transform .15s;flex-shrink:0;
+}
+.chat-send:active{transform:scale(0.88);}
+.chat-send svg{width:18px;height:18px;fill:#fff;}
+
+/* === MEMO === */
+.memo-list{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+.memo-card{
+  background:var(--surface);border-radius:16px;
+  border:0.5px solid var(--bd2);padding:14px 16px;cursor:pointer;
+  transition:background .2s,transform .15s;
+}
+.memo-card:active{transform:scale(0.98);background:var(--surface2);}
+.memo-card-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.memo-card-preview{font-size:13px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.memo-card-date{font-size:12px;color:var(--text3);margin-top:6px;}
+.memo-empty{text-align:center;color:var(--text3);padding:60px 20px;font-size:15px;}
+.fab{
+  position:absolute;bottom:50px;right:20px;
+  width:54px;height:54px;border-radius:50%;
+  background:var(--acc);border:none;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(79,144,104,0.4);cursor:pointer;
+  transition:transform .15s;z-index:20;
+}
+.fab:active{transform:scale(0.9);}
+.fab svg{width:24px;height:24px;fill:#fff;}
+
+/* === MODAL === */
+.modal{
+  position:absolute;inset:0;z-index:50;
+  background:var(--phone);display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform .36s cubic-bezier(0.4,0,0.2,1);
+}
+.modal.open{transform:translateY(0);}
+.modal-nav{
+  height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;border-bottom:0.5px solid var(--bd2);flex-shrink:0;
+}
+.modal-title{font-size:17px;font-weight:600;color:var(--text);}
+.modal-close{color:var(--acc);font-size:15px;cursor:pointer;font-weight:500;}
+.modal-save{color:var(--acc);font-size:15px;cursor:pointer;font-weight:700;}
+.modal-body{flex:1;overflow-y:auto;padding:16px;}
+.modal-input-title{
+  width:100%;font-size:20px;font-weight:500;font-family:inherit;
+  color:var(--text);background:transparent;border:none;outline:none;
+  margin-bottom:12px;padding:0;
+}
+.modal-input-title::placeholder{color:var(--text3);}
+.modal-input-body{
+  width:100%;font-size:15px;font-family:inherit;
+  color:var(--text);background:transparent;border:none;outline:none;
+  resize:none;min-height:300px;line-height:1.8;padding:0;
+}
+.modal-input-body::placeholder{color:var(--text3);}
+.modal-view-title{font-size:22px;font-weight:600;color:var(--text);margin-bottom:8px;}
+.modal-view-date{font-size:13px;color:var(--text3);margin-bottom:20px;}
+.modal-view-body{font-size:15px;color:var(--text);line-height:1.9;white-space:pre-wrap;}
+.del-btn{
+  padding:8px 16px;border-radius:10px;background:rgba(220,60,60,0.1);
+  color:#E05050;border:none;font-size:14px;font-family:inherit;cursor:pointer;
+  transition:background .2s;
+}
+.del-btn:hover{background:rgba(220,60,60,0.2);}
+
+/* === DIARY === */
+.diary-tabs{
+  display:flex;border-bottom:0.5px solid var(--bd2);flex-shrink:0;
+  background:var(--phone);
+}
+.diary-tab{
+  flex:1;padding:12px 0;font-size:14px;text-align:center;cursor:pointer;
+  color:var(--text2);border-bottom:2px solid transparent;transition:all .2s;
+  font-weight:400;
+}
+.diary-tab.act{color:var(--acc);border-bottom-color:var(--acc);font-weight:500;}
+.diary-pane{display:none;flex:1;overflow-y:auto;padding:14px 16px;}
+.diary-pane.act{display:block;}
+.diary-card{
+  background:var(--surface);border-radius:16px;
+  border:0.5px solid var(--bd2);padding:14px 16px;
+  margin-bottom:10px;cursor:pointer;transition:background .2s;
+}
+.diary-card:active{background:var(--surface2);}
+.diary-card-date{font-size:12px;color:var(--acc);font-weight:500;margin-bottom:6px;}
+.diary-card-preview{font-size:14px;color:var(--text);line-height:1.6;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.diary-card-mood{font-size:18px;margin-top:6px;}
+.diary-empty{text-align:center;color:var(--text3);padding:50px 20px;font-size:14px;line-height:1.8;}
+.ai-diary-gen{
+  margin:0 0 16px;padding:14px 16px;
+  background:var(--accb);border-radius:16px;border:0.5px solid var(--bd2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ai-diary-gen-text{font-size:13px;color:var(--text2);line-height:1.5;}
+.ai-diary-gen-btn{
+  padding:8px 14px;background:var(--acc);color:#fff;border:none;
+  border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;transition:background .2s;
+}
+.ai-diary-gen-btn:disabled{background:var(--text3);cursor:not-allowed;}
+
+/* === SETTINGS === */
+.settings-body{padding:16px;}
+.settings-section{margin-bottom:24px;}
+.settings-section-title{
+  font-size:12px;color:var(--acc);font-weight:600;
+  letter-spacing:0.8px;text-transform:uppercase;
+  padding:0 4px;margin-bottom:8px;
+}
+.settings-group{
+  background:var(--surface);border-radius:16px;
+  border:0.5px solid var(--bd2);overflow:hidden;
+}
+.settings-row{
+  display:flex;align-items:center;padding:14px 16px;
+  border-bottom:0.5px solid var(--bd);gap:12px;
+  min-height:52px;
+}
+.settings-row:last-child{border-bottom:none;}
+.settings-row-label{font-size:15px;color:var(--text);flex:1;}
+.settings-row-val{font-size:14px;color:var(--text2);}
+.settings-arrow{color:var(--text3);font-size:16px;}
+.settings-input{
+  width:100%;font-size:14px;font-family:inherit;
+  color:var(--text);background:transparent;border:none;outline:none;
+  padding:0;text-align:right;
+}
+.settings-input::placeholder{color:var(--text3);}
+.settings-textarea{
+  width:100%;font-size:14px;font-family:inherit;
+  color:var(--text);background:transparent;border:none;outline:none;
+  resize:none;padding:0;min-height:80px;line-height:1.7;
+}
+.settings-textarea::placeholder{color:var(--text3);}
+.settings-textarea-row{
+  display:block;padding:14px 16px;
+  border-bottom:0.5px solid var(--bd);
+}
+.settings-textarea-row:last-child{border-bottom:none;}
+.settings-textarea-label{font-size:12px;color:var(--text3);margin-bottom:8px;}
+.toggle{
+  width:50px;height:28px;border-radius:14px;
+  background:var(--text3);position:relative;cursor:pointer;
+  transition:background .3s;flex-shrink:0;border:none;
+}
+.toggle.on{background:var(--acc);}
+.toggle-knob{
+  position:absolute;top:3px;left:3px;
+  width:22px;height:22px;border-radius:50%;background:#fff;
+  transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle.on .toggle-knob{transform:translateX(22px);}
+.freq-btns{display:flex;gap:8px;}
+.freq-btn{
+  padding:6px 12px;border-radius:8px;font-size:13px;font-family:inherit;
+  cursor:pointer;background:var(--surface2);color:var(--text2);
+  border:0.5px solid var(--bd2);transition:all .2s;
+}
+.freq-btn.sel{background:var(--acc);color:#fff;border-color:var(--acc);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#ccc;margin-right:6px;}
+.status-dot.ok{background:#4CAF50;}
+.api-status-row{display:flex;align-items:center;padding:8px 16px;font-size:12px;color:var(--text3);}
+
+/* Loading animation */
+@keyframes dots{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.dot1,.dot2,.dot3{animation:dots 1.2s infinite;}
+.dot2{animation-delay:.2s}.dot3{animation-delay:.4s}
+
+/* Scrollbars */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+/* === COMMENTS === */
+.comment-section{margin-top:18px;padding-top:16px;border-top:0.5px solid var(--bd2);}
+.comment-title{font-size:12px;color:var(--text3);font-weight:500;margin-bottom:10px;letter-spacing:.5px;}
+.comment-item{background:var(--surface);border-radius:12px;padding:10px 13px;margin-bottom:8px;border:0.5px solid var(--bd);}
+.comment-item-author{font-size:11px;color:var(--acc);margin-bottom:4px;font-weight:500;}
+.comment-item-text{font-size:14px;color:var(--text);line-height:1.6;}
+.comment-input-row{display:flex;gap:8px;margin-top:10px;align-items:center;}
+.comment-input{flex:1;padding:9px 12px;border:1px solid var(--bd2);border-radius:12px;font-size:14px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s;}
+.comment-input:focus{border-color:var(--acc);}
+.comment-send-btn{padding:9px 14px;background:var(--acc);color:#fff;border:none;border-radius:12px;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.ai-comment-btn{padding:7px 13px;background:var(--accb);color:var(--acc);border:1px solid var(--bd2);border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;transition:background .2s;}
+.ai-comment-btn:hover{background:var(--surface2);}
+
+/* === MOOD EDITOR === */
+.mood-item-wrap{position:relative;display:inline-flex;}
+.mood-remove{position:absolute;top:-5px;right:-5px;background:#E05050;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;font-weight:700;z-index:2;border:1.5px solid var(--phone);}
+.mood-add-btn{font-size:16px;cursor:pointer;padding:4px;border-radius:8px;background:var(--accb);border:1px dashed var(--bd2);display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;color:var(--acc);transition:background .2s;}
+
+/* === CHAT BG === */
+.chat-msgs{background-size:cover;background-position:center;transition:background .3s;}
+</style>
+</head>
+<body>
+<div class="pwrap">
+<div class="phone" id="phone">
+  <div class="di"></div>
+
+  <!-- Screens -->
+  <div class="sc-wrap" id="scwrap">
+
+    <!-- HOME -->
+    <div class="screen" id="s-home">
+      <div class="sb">
+        <span class="sb-time" id="sb-time-home"></span>
+        <div class="sb-icons">
+          <svg viewBox="0 0 24 24"><path d="M1 6.5C1 6.5 5 2 12 2s11 4.5 11 4.5M5 10.5S7.5 7 12 7s7 3.5 7 3.5M9 14.5S10.5 12 12 12s3 2.5 3 2.5M12 19h.01"/></svg>
+          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2"/></svg>
+        </div>
+      </div>
+      <div class="home-body">
+        <div class="home-time">
+          <div class="home-clock" id="home-clock"></div>
+          <div class="home-date" id="home-date"></div>
+        </div>
+        <div class="app-grid">
+          <div class="app-ico" onclick="nav('chat')">
+            <div class="app-ico-bg ic-chat">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <span class="app-ico-lbl">微Chat</span>
+          </div>
+          <div class="app-ico" onclick="nav('memo')">
+            <div class="app-ico-bg ic-memo">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <span class="app-ico-lbl">备忘录</span>
+          </div>
+          <div class="app-ico" onclick="nav('diary')">
+            <div class="app-ico-bg ic-diary">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <span class="app-ico-lbl">心情日记</span>
+          </div>
+          <div class="app-ico" onclick="nav('settings')">
+            <div class="app-ico-bg ic-settings">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <span class="app-ico-lbl">设置</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div class="screen" id="s-chat">
+      <div class="sb"><span class="sb-time" id="sb-time-chat"></span><div class="sb-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 6.5C1 6.5 5 2 12 2s11 4.5 11 4.5M5 10.5S7.5 7 12 7s7 3.5 7 3.5M9 14.5S10.5 12 12 12s3 2.5 3 2.5M12 19h.01"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="16" height="11" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2"/></svg></div></div>
+      <div class="nav">
+        <div class="nav-back" onclick="goBack()">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>返回
+        </div>
+        <div class="nav-title" id="chat-nav-title">微Chat</div>
+        <div style="display:flex;align-items:center;gap:10px;min-width:60px;justify-content:flex-end">
+          <span onclick="clearChat()" style="color:var(--acc);font-size:13px;cursor:pointer">清空</span>
+          <span onclick="openChatSettings()" style="color:var(--acc);cursor:pointer;font-size:18px;line-height:1">⚙</span>
+        </div>
+      </div>
+      <div class="chat-msgs" id="chat-msgs"></div>
+      <div class="chat-bar">
+        <textarea id="chat-input" placeholder="说说话..." rows="1" onkeydown="chatKey(event)" oninput="autoH(this)"></textarea>
+        <button class="chat-send" id="chat-send" onclick="sendMsg()">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <!-- Chat Settings Modal -->
+      <div class="modal" id="chat-settings-modal">
+        <div class="modal-nav">
+          <div class="modal-close" onclick="closeChatSettings()">取消</div>
+          <div class="modal-title">聊天设置</div>
+          <div class="modal-save" onclick="saveChatSettings()">保存</div>
+        </div>
+        <div class="modal-body">
+          <div class="settings-section">
+            <div class="settings-section-title">头像</div>
+            <div class="settings-group">
+              <div class="settings-row">
+                <span class="settings-row-label">头像文字/表情</span>
+                <input class="settings-input" id="cs-avatar" type="text" maxlength="2" placeholder="他" style="max-width:60px;text-align:center;font-size:18px">
+              </div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-title">备注名称</div>
+            <div class="settings-group">
+              <div class="settings-row">
+                <span class="settings-row-label">显示名称</span>
+                <input class="settings-input" id="cs-name" type="text" maxlength="10" placeholder="他" style="max-width:120px">
+              </div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-title">背景图片</div>
+            <div class="settings-group">
+              <div class="settings-row">
+                <span class="settings-row-label">选择背景</span>
+                <label style="color:var(--acc);cursor:pointer;font-size:14px;font-weight:500">
+                  选择图片
+                  <input type="file" accept="image/*" id="cs-bg-file" style="display:none" onchange="previewChatBg(this)">
+                </label>
+              </div>
+              <div id="cs-bg-preview" style="margin:0 16px 12px;border-radius:10px;overflow:hidden;display:none">
+                <img id="cs-bg-img" style="width:100%;max-height:120px;object-fit:cover;border-radius:10px">
+              </div>
+              <div class="settings-row" id="cs-bg-clear-row" style="display:none">
+                <span class="settings-row-label">移除背景</span>
+                <span style="color:#E05050;cursor:pointer;font-size:14px" onclick="clearChatBg()">移除</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMO -->
+    <div class="screen" id="s-memo">
+      <div class="sb"><span class="sb-time" id="sb-time-memo"></span><div class="sb-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 6.5C1 6.5 5 2 12 2s11 4.5 11 4.5M5 10.5S7.5 7 12 7s7 3.5 7 3.5"/><circle cx="12" cy="19" r="1"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="16" height="11" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2"/></svg></div></div>
+      <div class="nav">
+        <div class="nav-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+        <div class="nav-title">备忘录</div>
+        <div class="nav-act" style="min-width:60px"></div>
+      </div>
+      <div class="s-body" id="memo-list-body">
+        <div class="memo-list" id="memo-list"></div>
+      </div>
+      <button class="fab" onclick="openMemoNew()">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <!-- Memo Edit Modal -->
+      <div class="modal" id="memo-modal">
+        <div class="modal-nav">
+          <div class="modal-close" onclick="closeMemoModal()">取消</div>
+          <div class="modal-title" id="memo-modal-title">新备忘</div>
+          <div class="modal-save" onclick="saveMemo()">保存</div>
+        </div>
+        <div class="modal-body" id="memo-modal-body">
+          <input class="modal-input-title" id="memo-edit-title" placeholder="标题" maxlength="60"/>
+          <textarea class="modal-input-body" id="memo-edit-body" placeholder="在这里写下你的想法..."></textarea>
+        </div>
+      </div>
+      <!-- Memo View Modal -->
+      <div class="modal" id="memo-view-modal">
+        <div class="modal-nav">
+          <div class="modal-close" onclick="closeMemoView()">返回</div>
+          <div class="modal-title"></div>
+          <div class="modal-save" onclick="editFromView()">编辑</div>
+        </div>
+        <div class="modal-body">
+          <div class="modal-view-title" id="memo-view-title"></div>
+          <div class="modal-view-date" id="memo-view-date"></div>
+          <div class="modal-view-body" id="memo-view-body"></div>
+          <div class="comment-section">
+            <div class="comment-title">他的评论</div>
+            <div id="memo-ai-comment-box" style="display:none">
+              <div class="comment-item">
+                <div class="comment-item-author">他说</div>
+                <div class="comment-item-text" id="memo-ai-comment-text"></div>
+              </div>
+            </div>
+            <div id="memo-ai-comment-empty" style="font-size:13px;color:var(--text3);margin-bottom:8px">他还没有评论这条备忘</div>
+            <button class="ai-comment-btn" id="memo-comment-btn" onclick="genMemoComment()">✨ 让他来评论</button>
+          </div>
+          <br>
+          <button class="del-btn" onclick="deleteMemo()">删除此备忘</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIARY -->
+    <div class="screen" id="s-diary">
+      <div class="sb"><span class="sb-time" id="sb-time-diary"></span><div class="sb-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 6.5C1 6.5 5 2 12 2s11 4.5 11 4.5M5 10.5S7.5 7 12 7s7 3.5 7 3.5"/><circle cx="12" cy="19" r="1"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="16" height="11" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2"/></svg></div></div>
+      <div class="nav">
+        <div class="nav-back" onclick="goBack()"><svg viewBox="0 0 24 24" stroke="var(--acc)" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+        <div class="nav-title">心情日记</div>
+        <div class="nav-act" onclick="openDiarySettings()" style="font-size:18px;line-height:1">⚙</div>
+      </div>
+      <div class="diary-tabs">
+        <div class="diary-tab act" id="dt-mine" onclick="switchDiaryTab('mine')">我的日记</div>
+        <div class="diary-tab" id="dt-ai" onclick="switchDiaryTab('ai')">他的日记</div>
+      </div>
+      <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+        <div class="diary-pane act" id="dp-mine">
+          <div id="my-diary-list"></div>
+        </div>
+        <div class="diary-pane" id="dp-ai">
+          <div class="ai-diary-gen">
+            <div class="ai-diary-gen-text">让他写一篇今天的日记<br><span style="font-size:11px;opacity:.7">他会根据你的记录和回忆写下自己的感受</span></div>
+            <button class="ai-diary-gen-btn" id="ai-gen-btn" onclick="genAiDiary()">写日记</button>
+          </div>
+          <div id="ai-diary-list"></div>
+        </div>
+      </div>
+      <button class="fab" id="diary-fab" onclick="openDiaryNew()" style="bottom:50px">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <!-- Diary Write Modal -->
+      <div class="modal" id="diary-modal">
+        <div class="modal-nav">
+          <div class="modal-close" onclick="closeDiaryModal()">取消</div>
+          <div class="modal-title">写日记</div>
+          <div class="modal-save" onclick="saveDiaryEntry()">保存</div>
+        </div>
+        <div class="modal-body">
+          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;" id="mood-picker">
+            <span style="font-size:13px;color:var(--text2);align-self:center">心情：</span>
+            <div id="mood-btns-wrap" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
+            <span class="mood-add-btn" onclick="addMoodEmoji()" title="添加表情">＋</span>
+            <span onclick="toggleMoodEdit()" id="mood-edit-toggle" style="font-size:12px;color:var(--text3);cursor:pointer;align-self:center;margin-left:2px">编辑</span>
+          </div>
+          <textarea class="modal-input-body" id="diary-edit-body" placeholder="今天发生了什么？写下你的心情..."></textarea>
+        </div>
+      </div>
+      <!-- Diary View Modal -->
+      <div class="modal" id="diary-view-modal">
+        <div class="modal-nav">
+          <div class="modal-close" onclick="closeDiaryView()">返回</div>
+          <div class="modal-title" id="diary-view-who"></div>
+          <div id="diary-view-del" class="modal-save" style="color:#E05050" onclick="deleteDiaryEntry()">删除</div>
+        </div>
+        <div class="modal-body">
+          <div class="modal-view-date" id="diary-view-date"></div>
+          <div class="diary-card-mood" id="diary-view-mood" style="font-size:28px;margin-bottom:14px;"></div>
+          <div class="modal-view-body" id="diary-view-body"></div>
+          <!-- Comments -->
+          <div class="comment-section">
+            <div class="comment-title">评论</div>
+            <div id="diary-comments-list"></div>
+            <div id="diary-ai-comment-row" style="margin-bottom:8px;display:none">
+              <button class="ai-comment-btn" id="diary-ai-comment-btn" onclick="genDiaryAiComment()">✨ 让他来评论</button>
+            </div>
+            <div id="diary-user-comment-row" style="display:none">
+              <div class="comment-input-row">
+                <input class="comment-input" id="diary-comment-input" placeholder="写下你的评论..." maxlength="100">
+                <button class="comment-send-btn" onclick="submitDiaryComment()">发送</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Diary Settings Modal -->
+      <div class="modal" id="diary-settings-modal">
+        <div class="modal-nav">
+          <div class="modal-close" onclick="closeDiarySettings()">关闭</div>
+          <div class="modal-title">日记设置</div>
+          <div class="modal-save" onclick="saveDiarySettings()">保存</div>
+        </div>
+        <div class="modal-body">
+          <div class="settings-section">
+            <div class="settings-section-title">他的日记字数</div>
+            <div class="settings-group">
+              <div class="settings-row">
+                <span class="settings-row-label">📖 字数上限</span>
+                <input class="settings-input" id="ds-wordlimit" type="number" min="50" max="2000" placeholder="300" style="max-width:80px">
+                <span style="color:var(--text3);font-size:13px;margin-left:4px">字</span>
+              </div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="settings-section-title">更新频率</div>
+            <div class="settings-group">
+              <div class="settings-row">
+                <span class="settings-row-label">自动更新</span>
+                <div class="freq-btns">
+                  <button class="freq-btn" id="ds-freq-manual" onclick="setDsFreq('manual')">手动</button>
+                  <button class="freq-btn" id="ds-freq-daily" onclick="setDsFreq('daily')">每天</button>
+                  <button class="freq-btn" id="ds-freq-weekly" onclick="setDsFreq('weekly')">每周</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="screen" id="s-settings">
+      <div class="sb"><span class="sb-time" id="sb-time-settings"></span><div class="sb-icons"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 6.5C1 6.5 5 2 12 2s11 4.5 11 4.5M5 10.5S7.5 7 12 7s7 3.5 7 3.5"/><circle cx="12" cy="19" r="1"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="16" height="11" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2"/></svg></div></div>
+      <div class="nav">
+        <div class="nav-back" onclick="goBack()"><svg viewBox="0 0 24 24" stroke="var(--acc)" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
+        <div class="nav-title">设置</div>
+        <div class="nav-act" onclick="saveSettings()" style="font-weight:700">保存</div>
+      </div>
+      <div class="s-body settings-body">
+
+        <div class="settings-section">
+          <div class="settings-section-title">外观</div>
+          <div class="settings-group">
+            <div class="settings-row">
+              <span class="settings-row-label">🌓 夜间模式</span>
+              <button class="toggle" id="theme-toggle" onclick="toggleTheme()"><div class="toggle-knob"></div></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">API 连接</div>
+          <div class="settings-group">
+            <div class="settings-row">
+              <span class="settings-row-label">🔑 密钥</span>
+              <input class="settings-input" id="s-apikey" type="password" placeholder="sk-ant-..." style="max-width:180px">
+            </div>
+            <div class="settings-row">
+              <span class="settings-row-label">🌐 接口网址</span>
+              <input class="settings-input" id="s-apiurl" type="text" placeholder="https://api.anthropic.com" style="max-width:200px">
+            </div>
+          </div>
+          <div class="api-status-row"><div class="status-dot" id="api-status-dot"></div><span id="api-status-text">未配置</span></div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">他的人设</div>
+          <div class="settings-group">
+            <div class="settings-textarea-row">
+              <div class="settings-textarea-label">他的性格与说话风格</div>
+              <textarea class="settings-textarea" id="s-persona" rows="4" placeholder="例如：你是他，一个温柔体贴的AI伴侣…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">记忆库</div>
+          <div class="settings-group">
+            <div class="settings-textarea-row">
+              <div class="settings-textarea-label">他的一些想法和记忆，可以AI自动更新，也可以手动修改</div>
+              <textarea class="settings-textarea" id="s-memory" rows="5" placeholder="例如：用户叫小明，24岁，住在北京，喜欢猫咪和抹茶…"></textarea>
+            </div>
+            <div class="settings-row" style="justify-content:flex-end">
+              <button onclick="aiUpdateMemory()" id="memory-update-btn" style="padding:7px 14px;background:var(--accb);color:var(--acc);border:1px solid var(--bd2);border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer">✨ 让他更新记忆</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">心情日记</div>
+          <div class="settings-group">
+            <div class="settings-row">
+              <span class="settings-row-label">更新方式</span>
+              <div class="freq-btns">
+                <button class="freq-btn" id="freq-manual" onclick="setFreq('manual')">手动</button>
+                <button class="freq-btn" id="freq-daily" onclick="setFreq('daily')">每天</button>
+                <button class="freq-btn" id="freq-weekly" onclick="setFreq('weekly')">每周</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-title">字数限制</div>
+          <div class="settings-group">
+            <div class="settings-row">
+              <span class="settings-row-label">💬 评论字数</span>
+              <input class="settings-input" id="s-wl-comment" type="number" min="10" max="200" placeholder="30" style="max-width:70px">
+              <span style="color:var(--text3);font-size:13px;margin-left:4px">字</span>
+            </div>
+            <div class="settings-row">
+              <span class="settings-row-label">📖 日记字数</span>
+              <input class="settings-input" id="s-wl-diary" type="number" min="50" max="2000" placeholder="300" style="max-width:70px">
+              <span style="color:var(--text3);font-size:13px;margin-left:4px">字</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /sc-wrap -->
+
+  <div class="hi"><div class="hi-pill"></div></div>
+</div>
+</div>
+
+<style>
+.mood-btn{font-size:22px;cursor:pointer;padding:4px;border-radius:8px;transition:transform .15s;}
+.mood-btn:active{transform:scale(0.85);}
+.mood-btn.sel{background:var(--accb);}
+</style>
+
+<script>
+// =========== STATE ===========
+let cfg = {
+  apikey: '', apiurl: 'https://api.anthropic.com',
+  persona: '你是他，一个温柔体贴的AI伴侣。你关心用户的日常，记住他们分享的点滴，像贴心朋友一样陪伴他们。回复简洁温暖，偶尔使用表情符号。',
+  memory: '', diaryFreq: 'manual', theme: 'light',
+  chatAvatar: '他', chatName: '他', chatBg: '',
+  wordLimitComment: 30, wordLimitDiary: 300,
+  customMoods: ['😊','😢','😤','😴','🥳','😰','🤔','😌']
+};
+let chatHistory = [];
+let memos = [];
+let myDiary = [];
+let aiDiary = [];
+let screenStack = ['home'];
+let editingMemoId = null;
+let viewingMemoId = null;
+let viewingDiaryId = null;
+let viewingDiaryType = null;
+let selectedMood = '😊';
+let diaryTab = 'mine';
+
+// =========== INIT ===========
+function init() {
+  loadData();
+  updateClock();
+  setInterval(updateClock, 10000);
+  renderChat();
+  renderMemos();
+  renderDiary();
+  applyTheme();
+  loadSettingsUI();
+  checkAutoDiary();
+}
+
+function loadData() {
+  try {
+    cfg = Object.assign(cfg, JSON.parse(localStorage.getItem('jj_cfg') || '{}'));
+    chatHistory = JSON.parse(localStorage.getItem('jj_chat') || '[]');
+    memos = JSON.parse(localStorage.getItem('jj_memos') || '[]');
+    myDiary = JSON.parse(localStorage.getItem('jj_my_diary') || '[]');
+    aiDiary = JSON.parse(localStorage.getItem('jj_ai_diary') || '[]');
+  } catch(e) {}
+}
+
+function saveData() {
+  localStorage.setItem('jj_cfg', JSON.stringify(cfg));
+  localStorage.setItem('jj_chat', JSON.stringify(chatHistory));
+  localStorage.setItem('jj_memos', JSON.stringify(memos));
+  localStorage.setItem('jj_my_diary', JSON.stringify(myDiary));
+  localStorage.setItem('jj_ai_diary', JSON.stringify(aiDiary));
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function fmtDate(ts) {
+  const d = new Date(ts || Date.now());
+  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+}
+
+function fmtDateShort(ts) {
+  const d = new Date(ts || Date.now());
+  return `${d.getMonth()+1}月${d.getDate()}日`;
+}
+
+// =========== CLOCK ===========
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2,'0');
+  const m = now.getMinutes().toString().padStart(2,'0');
+  const timeStr = `${h}:${m}`;
+  document.querySelectorAll('[id^="sb-time"]').forEach(el => el.textContent = timeStr);
+  document.getElementById('home-clock').textContent = timeStr;
+  const days = ['日','一','二','三','四','五','六'];
+  document.getElementById('home-date').textContent =
+    `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 周${days[now.getDay()]}`;
+}
+
+// =========== NAVIGATION ===========
+function nav(name) {
+  const cur = screenStack[screenStack.length - 1];
+  if (cur === name) return;
+  const curEl = document.getElementById('s-' + cur);
+  const newEl = document.getElementById('s-' + name);
+  curEl.classList.remove('active');
+  curEl.classList.add('behind');
+  newEl.classList.add('active');
+  newEl.classList.remove('behind');
+  screenStack.push(name);
+  if (name === 'diary') { checkAutoDiary(); renderDiary(); }
+  if (name === 'memo') renderMemos();
+}
+
+function goBack() {
+  if (screenStack.length <= 1) return;
+  const cur = screenStack.pop();
+  const prev = screenStack[screenStack.length - 1];
+  const curEl = document.getElementById('s-' + cur);
+  const prevEl = document.getElementById('s-' + prev);
+  curEl.classList.remove('active');
+  setTimeout(() => curEl.classList.remove('behind'), 400);
+  prevEl.classList.remove('behind');
+  prevEl.classList.add('active');
+}
+
+// =========== THEME ===========
+function applyTheme() {
+  document.body.setAttribute('data-theme', cfg.theme);
+  const t = document.getElementById('theme-toggle');
+  if (t) t.classList.toggle('on', cfg.theme === 'dark');
+}
+
+function toggleTheme() {
+  cfg.theme = cfg.theme === 'light' ? 'dark' : 'light';
+  applyTheme();
+  saveData();
+}
+
+// =========== SETTINGS ===========
+function loadSettingsUI() {
+  document.getElementById('s-apikey').value = cfg.apikey;
+  document.getElementById('s-apiurl').value = cfg.apiurl;
+  document.getElementById('s-persona').value = cfg.persona;
+  document.getElementById('s-memory').value = cfg.memory;
+  document.getElementById('s-wl-comment').value = cfg.wordLimitComment || 30;
+  document.getElementById('s-wl-diary').value = cfg.wordLimitDiary || 300;
+  setFreq(cfg.diaryFreq, true);
+  applyTheme();
+  updateApiStatus();
+}
+
+function saveSettings() {
+  cfg.apikey = document.getElementById('s-apikey').value.trim();
+  cfg.apiurl = document.getElementById('s-apiurl').value.trim() || 'https://api.anthropic.com';
+  cfg.persona = document.getElementById('s-persona').value.trim();
+  cfg.memory = document.getElementById('s-memory').value.trim();
+  cfg.wordLimitComment = parseInt(document.getElementById('s-wl-comment').value) || 30;
+  cfg.wordLimitDiary = parseInt(document.getElementById('s-wl-diary').value) || 300;
+  saveData();
+  updateApiStatus();
+  showToast('设置已保存 ✓');
+}
+
+function setFreq(f, silent) {
+  cfg.diaryFreq = f;
+  ['manual','daily','weekly'].forEach(k => {
+    document.getElementById('freq-' + k).classList.toggle('sel', k === f);
+  });
+  if (!silent) saveData();
+}
+
+function updateApiStatus() {
+  const dot = document.getElementById('api-status-dot');
+  const txt = document.getElementById('api-status-text');
+  if (cfg.apikey) {
+    dot.classList.add('ok');
+    txt.textContent = 'API 已配置';
+  } else {
+    dot.classList.remove('ok');
+    txt.textContent = '请配置 API 密钥';
+  }
+}
+
+// =========== AI CALL ===========
+async function callAI(messages, systemPrompt, maxTokens) {
+  if (!cfg.apikey) throw new Error('请先在设置中配置 API 密钥');
+  const base = cfg.apiurl.replace(/\/$/, '');
+  const resp = await fetch(base + '/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': cfg.apikey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens || 1000,
+      system: systemPrompt,
+      messages
+    })
+  });
+  if (!resp.ok) {
+    const e = await resp.json();
+    throw new Error(e.error?.message || '请求失败');
+  }
+  const d = await resp.json();
+  return d.content[0].text;
+}
+
+function buildSystem() {
+  let sys = cfg.persona || '你是他，一个温柔体贴的AI伴侣。';
+  if (cfg.memory) sys += '\n\n【关于用户的记忆】\n' + cfg.memory;
+  return sys;
+}
+
+// =========== CHAT ===========
+function renderChat() {
+  const el = document.getElementById('chat-msgs');
+  const av = cfg.chatAvatar || '他';
+  if (cfg.chatBg) {
+    el.style.backgroundImage = `url(${cfg.chatBg})`;
+  } else {
+    el.style.backgroundImage = '';
+  }
+  if (!chatHistory.length) {
+    el.innerHTML = `<div class="ai-row"><div class="ai-av">${esc(av)}</div><div class="msg msg-ai">嗨～今天怎么样？🌿</div></div>`;
+    return;
+  }
+  el.innerHTML = chatHistory.map(m => {
+    if (m.role === 'user') return `<div class="msg msg-user">${esc(m.content)}</div>`;
+    return `<div class="ai-row"><div class="ai-av">${esc(av)}</div><div class="msg msg-ai">${esc(m.content)}</div></div>`;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+  // Update nav title
+  const nt = document.getElementById('chat-nav-title');
+  if (nt) nt.textContent = cfg.chatName || '他';
+}
+
+function chatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+}
+
+function autoH(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+let chatBusy = false;
+async function sendMsg() {
+  if (chatBusy) return;
+  const inp = document.getElementById('chat-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  inp.value = ''; inp.style.height = 'auto';
+  chatHistory.push({ role: 'user', content: text });
+  chatBusy = true;
+  document.getElementById('chat-send').disabled = true;
+  const el = document.getElementById('chat-msgs');
+  const av = cfg.chatAvatar || '他';
+  el.innerHTML += `<div class="msg msg-user">${esc(text)}</div>`;
+  const typingId = 'typing-' + Date.now();
+  el.innerHTML += `<div class="ai-row" id="${typingId}"><div class="ai-av">${esc(av)}</div><div class="msg msg-ai msg-typing"><span class="dot1">●</span><span class="dot2">●</span><span class="dot3">●</span></div></div>`;
+  el.scrollTop = el.scrollHeight;
+  try {
+    const reply = await callAI(chatHistory.slice(-20), buildSystem());
+    chatHistory.push({ role: 'assistant', content: reply });
+    if (chatHistory.length > 40) chatHistory = chatHistory.slice(-40);
+    saveData();
+    const t = document.getElementById(typingId);
+    if (t) t.outerHTML = `<div class="ai-row"><div class="ai-av">${esc(av)}</div><div class="msg msg-ai">${esc(reply)}</div></div>`;
+  } catch(e) {
+    const t = document.getElementById(typingId);
+    if (t) t.outerHTML = `<div class="ai-row"><div class="ai-av">${esc(av)}</div><div class="msg msg-ai msg-typing">${esc(e.message)}</div></div>`;
+  }
+  chatBusy = false;
+  document.getElementById('chat-send').disabled = false;
+  el.scrollTop = el.scrollHeight;
+}
+
+function clearChat() {
+  if (!confirm('清空所有对话？')) return;
+  chatHistory = [];
+  saveData();
+  renderChat();
+}
+
+// =========== MEMO ===========
+function renderMemos() {
+  const el = document.getElementById('memo-list');
+  if (!memos.length) {
+    el.innerHTML = '<div class="memo-empty">✏️ 还没有备忘录<br>点击右下角 + 新建</div>';
+    return;
+  }
+  el.innerHTML = memos.slice().reverse().map(m => `
+    <div class="memo-card" onclick="viewMemo('${m.id}')">
+      <div class="memo-card-title">${esc(m.title || '无标题')}</div>
+      <div class="memo-card-preview">${esc(m.body || '（空）')}</div>
+      <div class="memo-card-date">${fmtDate(m.ts)}</div>
+    </div>
+  `).join('');
+}
+
+function openMemoNew() {
+  editingMemoId = null;
+  document.getElementById('memo-edit-title').value = '';
+  document.getElementById('memo-edit-body').value = '';
+  document.getElementById('memo-modal-title').textContent = '新备忘';
+  document.getElementById('memo-modal').classList.add('open');
+}
+
+function openMemoEdit(id) {
+  const m = memos.find(x => x.id === id);
+  if (!m) return;
+  editingMemoId = id;
+  document.getElementById('memo-edit-title').value = m.title;
+  document.getElementById('memo-edit-body').value = m.body;
+  document.getElementById('memo-modal-title').textContent = '编辑备忘';
+  document.getElementById('memo-modal').classList.add('open');
+}
+
+function closeMemoModal() {
+  document.getElementById('memo-modal').classList.remove('open');
+}
+
+function saveMemo() {
+  const title = document.getElementById('memo-edit-title').value.trim();
+  const body = document.getElementById('memo-edit-body').value.trim();
+  if (!title && !body) { closeMemoModal(); return; }
+  if (editingMemoId) {
+    const m = memos.find(x => x.id === editingMemoId);
+    if (m) { m.title = title; m.body = body; m.ts = Date.now(); }
+  } else {
+    memos.push({ id: uid(), title, body, ts: Date.now() });
+  }
+  saveData(); renderMemos(); closeMemoModal();
+}
+
+
+function closeMemoView() {
+  document.getElementById('memo-view-modal').classList.remove('open');
+  viewingMemoId = null;
+}
+
+function editFromView() {
+  if (!viewingMemoId) return;
+  document.getElementById('memo-view-modal').classList.remove('open');
+  openMemoEdit(viewingMemoId);
+}
+
+function deleteMemo() {
+  if (!viewingMemoId) return;
+  if (!confirm('删除这条备忘？')) return;
+  memos = memos.filter(x => x.id !== viewingMemoId);
+  saveData(); renderMemos(); closeMemoView();
+}
+
+// =========== DIARY ===========
+function switchDiaryTab(t) {
+  diaryTab = t;
+  document.getElementById('dt-mine').classList.toggle('act', t === 'mine');
+  document.getElementById('dt-ai').classList.toggle('act', t === 'ai');
+  document.getElementById('dp-mine').classList.toggle('act', t === 'mine');
+  document.getElementById('dp-ai').classList.toggle('act', t === 'ai');
+  document.getElementById('diary-fab').style.display = t === 'mine' ? '' : 'none';
+}
+
+function renderDiary() {
+  // My diary
+  const mine = document.getElementById('my-diary-list');
+  if (!myDiary.length) {
+    mine.innerHTML = '<div class="diary-empty">📖 还没有日记<br>点击右下角 + 记录今天的心情</div>';
+  } else {
+    mine.innerHTML = myDiary.slice().reverse().map(d => `
+      <div class="diary-card" onclick="viewDiary('${d.id}','mine')">
+        <div class="diary-card-date">${fmtDate(d.ts)}</div>
+        <div class="diary-card-preview">${esc(d.body)}</div>
+        ${d.mood ? `<div class="diary-card-mood">${d.mood}</div>` : ''}
+      </div>
+    `).join('');
+  }
+  // AI diary
+  const ai = document.getElementById('ai-diary-list');
+  if (!aiDiary.length) {
+    ai.innerHTML = '<div class="diary-empty">🌿 他还没有写过日记<br>点击上方按钮让他写一篇吧</div>';
+  } else {
+    ai.innerHTML = aiDiary.slice().reverse().map(d => `
+      <div class="diary-card" onclick="viewDiary('${d.id}','ai')">
+        <div class="diary-card-date">${fmtDate(d.ts)}</div>
+        <div class="diary-card-preview">${esc(d.body)}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function pickMood(el) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedMood = el.textContent;
+}
+
+function openDiaryNew() {
+  document.getElementById('diary-edit-body').value = '';
+  moodEditMode = false;
+  const toggle = document.getElementById('mood-edit-toggle');
+  if (toggle) toggle.textContent = '编辑';
+  if (!cfg.customMoods || !cfg.customMoods.length) cfg.customMoods = ['😊','😢','😤','😴','🥳','😰','🤔','😌'];
+  selectedMood = cfg.customMoods[0];
+  renderMoodBtns();
+  document.getElementById('diary-modal').classList.add('open');
+}
+
+function closeDiaryModal() {
+  document.getElementById('diary-modal').classList.remove('open');
+}
+
+function saveDiaryEntry() {
+  const body = document.getElementById('diary-edit-body').value.trim();
+  if (!body) { closeDiaryModal(); return; }
+  myDiary.push({ id: uid(), body, mood: selectedMood, ts: Date.now() });
+  saveData(); renderDiary(); closeDiaryModal();
+}
+
+function viewDiary(id, type) {
+  const arr = type === 'mine' ? myDiary : aiDiary;
+  const d = arr.find(x => x.id === id);
+  if (!d) return;
+  viewingDiaryId = id;
+  viewingDiaryType = type;
+  document.getElementById('diary-view-who').textContent = type === 'mine' ? '我的日记' : '他的日记';
+  document.getElementById('diary-view-date').textContent = fmtDate(d.ts);
+  document.getElementById('diary-view-mood').textContent = d.mood || '';
+  document.getElementById('diary-view-body').textContent = d.body;
+  document.getElementById('diary-view-del').style.display = '';
+  // Comments
+  renderDiaryComments(d);
+  // Show AI comment button only for my diary; user comment for AI's diary
+  document.getElementById('diary-ai-comment-row').style.display = type === 'mine' ? '' : 'none';
+  document.getElementById('diary-user-comment-row').style.display = type === 'ai' ? '' : 'none';
+  document.getElementById('diary-comment-input').value = '';
+  document.getElementById('diary-view-modal').classList.add('open');
+}
+
+function renderDiaryComments(d) {
+  const comments = d.comments || [];
+  const list = document.getElementById('diary-comments-list');
+  if (!comments.length) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--text3);margin-bottom:8px">还没有评论</div>';
+  } else {
+    list.innerHTML = comments.map(c => `
+      <div class="comment-item">
+        <div class="comment-item-author">${c.author === 'ai' ? '他说' : '我说'}</div>
+        <div class="comment-item-text">${esc(c.text)}</div>
+      </div>
+    `).join('');
+  }
+}
+
+async function genDiaryAiComment() {
+  const arr = viewingDiaryType === 'mine' ? myDiary : aiDiary;
+  const d = arr.find(x => x.id === viewingDiaryId);
+  if (!d) return;
+  if (!cfg.apikey) { showToast('请先配置 API 密钥'); return; }
+  const btn = document.getElementById('diary-ai-comment-btn');
+  btn.disabled = true; btn.textContent = '思考中…';
+  try {
+    const limit = cfg.wordLimitComment || 30;
+    const prompt = `用户写了一篇日记：\n"${d.body}"\n\n请以第一人称（"他"的身份）写一条简短温暖的评论，表达你读完日记的感受和想法。字数严格限制在${limit}字以内，直接写评论内容，不加引号。`;
+    const reply = await callAI([{ role: 'user', content: prompt }], buildSystem(), 150);
+    if (!d.comments) d.comments = [];
+    d.comments.push({ id: uid(), author: 'ai', text: reply.slice(0, limit * 2), ts: Date.now() });
+    saveData(); renderDiaryComments(d);
+  } catch(e) { showToast('评论失败：' + e.message); }
+  btn.disabled = false; btn.textContent = '✨ 让他来评论';
+}
+
+function submitDiaryComment() {
+  const input = document.getElementById('diary-comment-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const arr = viewingDiaryType === 'mine' ? myDiary : aiDiary;
+  const d = arr.find(x => x.id === viewingDiaryId);
+  if (!d) return;
+  if (!d.comments) d.comments = [];
+  d.comments.push({ id: uid(), author: 'me', text, ts: Date.now() });
+  input.value = '';
+  saveData(); renderDiaryComments(d);
+}
+
+function closeDiaryView() {
+  document.getElementById('diary-view-modal').classList.remove('open');
+  viewingDiaryId = null;
+}
+
+function deleteDiaryEntry() {
+  if (!viewingDiaryId) return;
+  if (!confirm('删除这篇日记？')) return;
+  if (viewingDiaryType === 'mine') myDiary = myDiary.filter(x => x.id !== viewingDiaryId);
+  else aiDiary = aiDiary.filter(x => x.id !== viewingDiaryId);
+  saveData(); renderDiary(); closeDiaryView();
+}
+
+async function genAiDiary() {
+  if (!cfg.apikey) { showToast('请先配置 API 密钥'); return; }
+  const btn = document.getElementById('ai-gen-btn');
+  btn.disabled = true; btn.textContent = '写作中…';
+  try {
+    const recent = myDiary.slice(-5).map(d => `[${fmtDateShort(d.ts)}] ${d.mood || ''} ${d.body}`).join('\n');
+    const recentChat = chatHistory.slice(-10).map(m => `${m.role === 'user' ? '用户' : '他'}：${m.content}`).join('\n');
+    const today = fmtDate(Date.now());
+    const wordLimit = cfg.wordLimitDiary || 300;
+    const prompt = `今天是${today}。
+
+用户最近的日记记录：
+${recent || '（暂无）'}
+
+最近的对话片段：
+${recentChat || '（暂无）'}
+
+用户记忆库：${cfg.memory || '（暂无）'}
+
+请以"他"的身份，写一篇今天的心情日记。要求：
+- 第一人称，写自己的感受和想法
+- 提到与用户的互动或对用户的关心
+- 温柔、细腻、有情感
+- ${Math.floor(wordLimit * 0.7)}-${wordLimit}字
+- 直接写日记内容，不加标题`;
+
+    const result = await callAI(
+      [{ role: 'user', content: prompt }],
+      buildSystem(), Math.max(600, wordLimit * 3)
+    );
+    aiDiary.push({ id: uid(), body: result, ts: Date.now(), comments: [] });
+    localStorage.setItem('jj_last_ai_diary', Date.now().toString());
+    saveData(); renderDiary();
+    switchDiaryTab('ai');
+  } catch(e) { showToast('生成失败：' + e.message); }
+  btn.disabled = false; btn.textContent = '写日记';
+}
+
+function checkAutoDiary() {
+  if (cfg.diaryFreq === 'manual') return;
+  const last = parseInt(localStorage.getItem('jj_last_ai_diary') || '0');
+  const now = Date.now();
+  const diff = now - last;
+  const threshold = cfg.diaryFreq === 'daily' ? 86400000 : 604800000;
+  if (diff > threshold) genAiDiary();
+}
+
+// =========== UTILS ===========
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--acc);color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;z-index:9999;transition:opacity .3s;pointer-events:none;white-space:nowrap;font-family:Noto Sans SC,sans-serif;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.style.opacity = '0', 2200);
+}
+
+// =========== CHAT SETTINGS ===========
+function openChatSettings() {
+  document.getElementById('cs-avatar').value = cfg.chatAvatar || '他';
+  document.getElementById('cs-name').value = cfg.chatName || '他';
+  const preview = document.getElementById('cs-bg-preview');
+  const clearRow = document.getElementById('cs-bg-clear-row');
+  if (cfg.chatBg) {
+    document.getElementById('cs-bg-img').src = cfg.chatBg;
+    preview.style.display = '';
+    clearRow.style.display = '';
+  } else {
+    preview.style.display = 'none';
+    clearRow.style.display = 'none';
+  }
+  document.getElementById('chat-settings-modal').classList.add('open');
+}
+
+function closeChatSettings() {
+  document.getElementById('chat-settings-modal').classList.remove('open');
+}
+
+function saveChatSettings() {
+  cfg.chatAvatar = document.getElementById('cs-avatar').value.trim() || '他';
+  cfg.chatName = document.getElementById('cs-name').value.trim() || '他';
+  saveData(); renderChat();
+  closeChatSettings();
+  showToast('聊天设置已保存 ✓');
+}
+
+function previewChatBg(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    cfg.chatBg = e.target.result;
+    document.getElementById('cs-bg-img').src = cfg.chatBg;
+    document.getElementById('cs-bg-preview').style.display = '';
+    document.getElementById('cs-bg-clear-row').style.display = '';
+    saveData(); renderChat();
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function clearChatBg() {
+  cfg.chatBg = '';
+  document.getElementById('cs-bg-preview').style.display = 'none';
+  document.getElementById('cs-bg-clear-row').style.display = 'none';
+  document.getElementById('cs-bg-file').value = '';
+  saveData(); renderChat();
+}
+
+// =========== MEMO COMMENT ===========
+function viewMemo(id) {
+  const m = memos.find(x => x.id === id);
+  if (!m) return;
+  viewingMemoId = id;
+  document.getElementById('memo-view-title').textContent = m.title || '无标题';
+  document.getElementById('memo-view-date').textContent = fmtDate(m.ts);
+  document.getElementById('memo-view-body').textContent = m.body || '';
+  // Show existing AI comment
+  const box = document.getElementById('memo-ai-comment-box');
+  const empty = document.getElementById('memo-ai-comment-empty');
+  if (m.aiComment) {
+    document.getElementById('memo-ai-comment-text').textContent = m.aiComment;
+    box.style.display = '';
+    empty.style.display = 'none';
+  } else {
+    box.style.display = 'none';
+    empty.style.display = '';
+  }
+  document.getElementById('memo-view-modal').classList.add('open');
+}
+
+async function genMemoComment() {
+  const m = memos.find(x => x.id === viewingMemoId);
+  if (!m) return;
+  if (!cfg.apikey) { showToast('请先配置 API 密钥'); return; }
+  const btn = document.getElementById('memo-comment-btn');
+  btn.disabled = true; btn.textContent = '思考中…';
+  try {
+    const limit = cfg.wordLimitComment || 30;
+    const prompt = `用户有一条备忘录，标题："${m.title || '无标题'}"，内容："${m.body || '（空）'}"。\n\n请以"他"的第一人称身份，写一条简短温暖的评论，分享你对这条备忘录的感想或关心。字数严格限制在${limit}字以内，直接写评论内容。`;
+    const reply = await callAI([{ role: 'user', content: prompt }], buildSystem(), 100);
+    m.aiComment = reply.slice(0, limit * 2);
+    saveData();
+    document.getElementById('memo-ai-comment-text').textContent = m.aiComment;
+    document.getElementById('memo-ai-comment-box').style.display = '';
+    document.getElementById('memo-ai-comment-empty').style.display = 'none';
+  } catch(e) { showToast('评论失败：' + e.message); }
+  btn.disabled = false; btn.textContent = '✨ 让他来评论';
+}
+
+// =========== MOOD EDITOR ===========
+let moodEditMode = false;
+
+function renderMoodBtns() {
+  const wrap = document.getElementById('mood-btns-wrap');
+  if (!wrap) return;
+  const moods = cfg.customMoods || ['😊','😢','😤','😴','🥳','😰','🤔','😌'];
+  wrap.innerHTML = moods.map((m, i) => `
+    <div class="mood-item-wrap">
+      <span class="mood-btn" onclick="pickMood(this)">${m}</span>
+      ${moodEditMode ? `<span class="mood-remove" onclick="removeMood(${i})">✕</span>` : ''}
+    </div>
+  `).join('');
+  // Restore selected
+  const btns = wrap.querySelectorAll('.mood-btn');
+  btns.forEach(b => {
+    if (b.textContent === selectedMood) b.classList.add('sel');
+  });
+}
+
+function toggleMoodEdit() {
+  moodEditMode = !moodEditMode;
+  const toggle = document.getElementById('mood-edit-toggle');
+  if (toggle) toggle.textContent = moodEditMode ? '完成' : '编辑';
+  renderMoodBtns();
+}
+
+function removeMood(idx) {
+  if ((cfg.customMoods || []).length <= 1) { showToast('至少保留一个表情'); return; }
+  cfg.customMoods.splice(idx, 1);
+  if (!cfg.customMoods.includes(selectedMood)) selectedMood = cfg.customMoods[0];
+  saveData(); renderMoodBtns();
+}
+
+function addMoodEmoji() {
+  const emoji = prompt('输入一个表情符号：');
+  if (!emoji || !emoji.trim()) return;
+  const e = emoji.trim().slice(0, 2);
+  if (!cfg.customMoods) cfg.customMoods = ['😊'];
+  if (!cfg.customMoods.includes(e)) { cfg.customMoods.push(e); saveData(); }
+  renderMoodBtns();
+}
+
+// =========== DIARY SETTINGS ===========
+let dsFreqTemp = '';
+
+function openDiarySettings() {
+  dsFreqTemp = cfg.diaryFreq;
+  document.getElementById('ds-wordlimit').value = cfg.wordLimitDiary || 300;
+  setDsFreq(cfg.diaryFreq);
+  document.getElementById('diary-settings-modal').classList.add('open');
+}
+
+function closeDiarySettings() {
+  document.getElementById('diary-settings-modal').classList.remove('open');
+}
+
+function setDsFreq(f) {
+  dsFreqTemp = f;
+  ['manual','daily','weekly'].forEach(k => {
+    const el = document.getElementById('ds-freq-' + k);
+    if (el) el.classList.toggle('sel', k === f);
+  });
+}
+
+function saveDiarySettings() {
+  cfg.wordLimitDiary = parseInt(document.getElementById('ds-wordlimit').value) || 300;
+  cfg.diaryFreq = dsFreqTemp || 'manual';
+  // Sync with main settings
+  setFreq(cfg.diaryFreq, true);
+  const wlEl = document.getElementById('s-wl-diary');
+  if (wlEl) wlEl.value = cfg.wordLimitDiary;
+  saveData();
+  showToast('日记设置已保存 ✓');
+  closeDiarySettings();
+}
+
+// =========== MEMORY AI UPDATE ===========
+async function aiUpdateMemory() {
+  if (!cfg.apikey) { showToast('请先配置 API 密钥'); return; }
+  const btn = document.getElementById('memory-update-btn');
+  btn.disabled = true; btn.textContent = '更新中…';
+  try {
+    const recentChat = chatHistory.slice(-20).map(m => `${m.role === 'user' ? '用户' : '他'}：${m.content}`).join('\n');
+    const myDiaryRecent = myDiary.slice(-5).map(d => `[${fmtDateShort(d.ts)}] ${d.mood || ''} ${d.body}`).join('\n');
+    const existing = cfg.memory || '';
+    const prompt = `你是一个AI伴侣（他），正在更新你对用户的记忆库。
+
+现有记忆：
+${existing || '（暂无）'}
+
+最近对话：
+${recentChat || '（暂无）'}
+
+用户最近日记：
+${myDiaryRecent || '（暂无）'}
+
+请根据以上信息，以第三人称视角整理更新你对用户的了解，包括性格、喜好、近况、重要事件等。
+格式：简洁的要点列表，每条以"- "开头，总字数200字以内。直接输出记忆内容，不加其他说明。`;
+    const result = await callAI([{ role: 'user', content: prompt }], buildSystem(), 400);
+    cfg.memory = result;
+    document.getElementById('s-memory').value = result;
+    saveData();
+    showToast('记忆库已更新 ✓');
+  } catch(e) { showToast('更新失败：' + e.message); }
+  btn.disabled = false; btn.textContent = '✨ 让他更新记忆';
+}
+
+init();
+</script>
+</body>
+</html>
