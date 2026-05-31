@@ -1,1636 +1,584 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-touch-fullscreen" content="yes">
-<title>他</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Voice</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
 :root{
-  --bg:#CCDECE;--phone:#FFFFFF;--surface:#F4FAF5;--surface2:#EAF4EC;
-  --acc:#4F9068;--acc2:#3B7A56;--accl:rgba(79,144,104,0.10);--accb:#D8EDDF;
-  --text:#1A291E;--text2:#6A8A72;--text3:#A4BFA9;
-  --bd:rgba(79,144,104,0.12);--bd2:rgba(79,144,104,0.22);
-  --nav:rgba(255,255,255,0.88);--w1:#D6EBD8;--w2:#C0DFC4;
-  --shadow:0 32px 72px rgba(0,50,20,0.22),0 0 0 1.5px rgba(255,255,255,0.08);
+  --bg:#0d0d0b;--text:#e8e3d8;--dim:rgba(232,227,216,0.32);--dim2:rgba(232,227,216,0.55);
+  --border:rgba(232,227,216,0.09);--border2:rgba(232,227,216,0.2);
+  --blob:220,214,200;--ibg:rgba(232,227,216,0.04);--btn:#e8e3d8;--btntxt:#0d0d0b;
+  --panel:#111110;--glass:rgba(0,0,0,0.62);
 }
-[data-theme=dark]{
-  --bg:#060F08;--phone:#101A12;--surface:#162018;--surface2:#1C2A1E;
-  --acc:#4CCB87;--acc2:#3AB676;--accl:rgba(76,203,135,0.10);--accb:rgba(76,203,135,0.18);
-  --text:#E2EFE5;--text2:#7AAF87;--text3:#4A6A52;
-  --bd:rgba(76,203,135,0.09);--bd2:rgba(76,203,135,0.18);
-  --nav:rgba(16,26,18,0.90);--w1:#0A1510;--w2:#08110D;
-  --shadow:0 32px 72px rgba(0,0,0,0.55),0 0 0 1.5px rgba(255,255,255,0.04);
+[data-theme=day]{
+  --bg:#f2efe8;--text:#1a1714;--dim:rgba(26,23,20,0.35);--dim2:rgba(26,23,20,0.55);
+  --border:rgba(26,23,20,0.09);--border2:rgba(26,23,20,0.2);
+  --blob:26,22,16;--ibg:rgba(26,23,20,0.04);--btn:#1a1714;--btntxt:#f2efe8;
+  --panel:#ebe8e1;--glass:rgba(242,239,232,0.72);
 }
 
-/* ====== PINK THEME ====== */
-[data-color=pink]{
-  --bg:#EDDADD;--phone:#FFFFFF;--surface:#FAF3F4;--surface2:#F5EAEC;
-  --acc:#B87080;--acc2:#9A5A6A;--accl:rgba(184,112,128,0.10);--accb:#F0E0E3;
-  --text:#291A1E;--text2:#8A6A72;--text3:#BFA4A9;
-  --bd:rgba(184,112,128,0.12);--bd2:rgba(184,112,128,0.22);
-  --nav:rgba(255,255,255,0.88);--w1:#EDD8DC;--w2:#DFC0C8;
-  --shadow:0 32px 72px rgba(50,0,15,0.18),0 0 0 1.5px rgba(255,255,255,0.08);
-}
-[data-color=pink][data-theme=dark]{
-  --bg:#0F0608;--phone:#1A1012;--surface:#201618;--surface2:#2A1C1E;
-  --acc:#D08898;--acc2:#BC7080;--accl:rgba(208,136,152,0.10);--accb:rgba(208,136,152,0.18);
-  --text:#EFE2E5;--text2:#AF7A87;--text3:#6A4A52;
-  --bd:rgba(208,136,152,0.09);--bd2:rgba(208,136,152,0.18);
-  --nav:rgba(26,16,18,0.90);--w1:#150810;--w2:#11060D;
-  --shadow:0 32px 72px rgba(0,0,0,0.6),0 0 0 1.5px rgba(255,255,255,0.04);
-}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-weight:300;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .5s,color .5s}
+.app{height:100vh;display:flex;flex-direction:column;align-items:center}
 
-/* ====== PURPLE THEME ====== */
-[data-color=purple]{
-  --bg:#DAD8ED;--phone:#FFFFFF;--surface:#F5F4FA;--surface2:#ECEAF5;
-  --acc:#7868B8;--acc2:#6050A0;--accl:rgba(120,104,184,0.10);--accb:#E4E0F5;
-  --text:#1A1829;--text2:#7A70A0;--text3:#AEAAC0;
-  --bd:rgba(120,104,184,0.12);--bd2:rgba(120,104,184,0.22);
-  --nav:rgba(255,255,255,0.88);--w1:#DDD8ED;--w2:#C8C0E0;
-  --shadow:0 32px 72px rgba(20,0,50,0.18),0 0 0 1.5px rgba(255,255,255,0.08);
-}
-[data-color=purple][data-theme=dark]{
-  --bg:#07050F;--phone:#111018;--surface:#181620;--surface2:#1E1C2A;
-  --acc:#9888D0;--acc2:#7A68B8;--accl:rgba(152,136,208,0.10);--accb:rgba(152,136,208,0.18);
-  --text:#E5E2EF;--text2:#8878B0;--text3:#504A6A;
-  --bd:rgba(152,136,208,0.09);--bd2:rgba(152,136,208,0.18);
-  --nav:rgba(17,16,24,0.90);--w1:#0E0C18;--w2:#0A0814;
-  --shadow:0 32px 72px rgba(0,0,0,0.6),0 0 0 1.5px rgba(255,255,255,0.04);
-}
+header{width:100%;display:flex;justify-content:space-between;align-items:flex-start;padding:18px 22px;flex-shrink:0}
+.mark{display:flex;flex-direction:column;gap:3px}
+.mark-a{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.mark-b{font-size:8px;letter-spacing:.16em;color:var(--dim);opacity:.55}
+.hbtns{display:flex;gap:6px}
+.hbtn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;outline:none}
+.hbtn:hover{border-color:var(--border2);color:var(--text)}
+.hbtn svg{width:13px;height:13px;stroke-width:1.4}
 
-/* ====== BLUE THEME ====== */
-[data-color=blue]{
-  --bg:#D8E4EE;--phone:#FFFFFF;--surface:#F2F7FB;--surface2:#E8F0F7;
-  --acc:#5080A8;--acc2:#386890;--accl:rgba(80,128,168,0.10);--accb:#DCE8F3;
-  --text:#1A2229;--text2:#607888;--text3:#A0B4C0;
-  --bd:rgba(80,128,168,0.12);--bd2:rgba(80,128,168,0.22);
-  --nav:rgba(255,255,255,0.88);--w1:#D4E4F0;--w2:#BED0E8;
-  --shadow:0 32px 72px rgba(0,20,50,0.18),0 0 0 1.5px rgba(255,255,255,0.08);
-}
-[data-color=blue][data-theme=dark]{
-  --bg:#040810;--phone:#0C1420;--surface:#121A24;--surface2:#182030;
-  --acc:#6898C8;--acc2:#4A7CB0;--accl:rgba(104,152,200,0.10);--accb:rgba(104,152,200,0.18);
-  --text:#E0E8F0;--text2:#6888A8;--text3:#384860;
-  --bd:rgba(104,152,200,0.09);--bd2:rgba(104,152,200,0.18);
-  --nav:rgba(12,20,32,0.90);--w1:#060F1A;--w2:#040C14;
-  --shadow:0 32px 72px rgba(0,0,0,0.6),0 0 0 1.5px rgba(255,255,255,0.04);
-}
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;gap:28px;padding:0 20px;min-height:0}
+canvas{display:block}
 
-html,body{height:100%;background:var(--bg);transition:background .5s;}
-body{font-family:'Noto Sans SC',sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.subs{text-align:center;min-height:68px;max-width:600px;width:100%;display:flex;flex-direction:column;align-items:center;gap:9px}
+.sub-en{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:300;font-style:italic;line-height:1.45;color:var(--text);min-height:30px;opacity:0;transform:translateY(5px);transition:opacity .5s,transform .5s}
+.sub-en.on{opacity:1;transform:none}
+.sub-zh{font-size:10.5px;letter-spacing:.07em;color:var(--dim);min-height:16px;opacity:0;transition:opacity .5s .12s}
+.sub-zh.on{opacity:1}
 
-/* ====== MOBILE FULL-SCREEN PWA ====== */
-@media(max-width:520px){
-  html,body{
-    position:fixed;inset:0;overflow:hidden;
-    min-height:unset;height:100%;
-    display:block;background:none!important;
-  }
-  .pwrap{
-    position:fixed;inset:0;
-    width:100%;height:100%;
-  }
-  .phone{
-    width:100%!important;height:100%!important;
-    border-radius:0!important;box-shadow:none!important;
-  }
-  /* Hide fake status bar items on real phone - phone has its own */
-  .sb{display:none!important;}
-  /* Hide fake Dynamic Island - phone has real one */
-  .di{display:none!important;}
-  /* Safe area: nav gets top padding for status bar */
-  .nav{
-    padding-top:calc(8px + env(safe-area-inset-top,0px))!important;
-    height:auto!important;min-height:calc(56px + env(safe-area-inset-top,0px))!important;
-  }
-  /* Home screen top padding */
-  .home-body{padding-top:env(safe-area-inset-top,0px);}
-  /* Home indicator / bottom safe area - hide completely, no fallback white bar */
-  .hi{height:env(safe-area-inset-bottom,0px)!important;min-height:0!important;background:transparent!important;}
-  .hi-pill{display:none!important;}
-  /* Chat bar above home indicator */
-  .chat-bar{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;}
-  /* Modal nav: avoid status bar overlap on real phones */
-  .modal-nav{
-    padding-top:calc(10px + env(safe-area-inset-top,0px))!important;
-    height:auto!important;
-    min-height:calc(56px + env(safe-area-inset-top,0px))!important;
-  }
-}
+.foot{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;padding-bottom:2px}
+.status{font-size:8.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim);height:13px;text-align:center}
+.badge{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);opacity:.5}
 
-.pwrap{position:relative;}
-.phone{
-  width:390px;height:844px;
-  border-radius:55px;overflow:hidden;
-  position:relative;background:var(--phone);
-  box-shadow:var(--shadow);
-  transition:background .4s;
-  display:flex;flex-direction:column;
-}
+.inp-wrap{width:100%;max-width:520px;padding:0 22px 22px;flex-shrink:0}
+.inp-row{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:100px;padding:6px 6px 6px 18px;background:var(--ibg);transition:border-color .25s}
+.inp-row:focus-within{border-color:var(--border2)}
+.inp{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:'DM Mono',monospace;font-weight:300;letter-spacing:.02em}
+.inp::placeholder{color:var(--dim)}
+.mic,.send{width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;outline:none;transition:opacity .2s,transform .15s,background .2s,border-color .2s}
+.mic svg,.send svg{width:13px;height:13px;stroke-width:1.4}
+.mic{background:transparent;border:1px solid var(--border);color:var(--dim)}
+.mic:hover{border-color:var(--border2);color:var(--text)}
+.mic.rec{background:#b03030;border-color:#b03030;color:#fff;animation:pr 1.2s ease-in-out infinite}
+.send{background:var(--btn);color:var(--btntxt)}
+.send:hover{opacity:.8}
+.send:active{transform:scale(.93)}
+.send:disabled{opacity:.22;cursor:default;transform:none}
 
-/* Dynamic Island (desktop preview only) */
-.di{
-  position:absolute;top:13px;left:50%;transform:translateX(-50%);
-  width:122px;height:35px;background:#000;border-radius:20px;z-index:999;
-}
+@keyframes pr{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes bk{0%,80%,100%{opacity:.18}40%{opacity:1}}
+.dot{display:inline-block;animation:bk 1.4s infinite both}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 
-/* Status bar (desktop preview only) */
-.sb{
-  height:52px;display:flex;align-items:flex-end;justify-content:space-between;
-  padding:0 28px 10px;flex-shrink:0;
-  position:relative;z-index:10;transition:color .3s;
-}
-.sb-time{font-size:15px;font-weight:500;color:var(--text);}
-.sb-icons{display:flex;align-items:center;gap:5px;color:var(--text);}
-.sb-icons svg{width:16px;height:16px;fill:currentColor;}
+/* Settings */
+.ov{position:fixed;inset:0;background:var(--glass);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s;z-index:20}
+.ov.on{opacity:1;pointer-events:all}
+.sp{position:fixed;top:0;right:0;bottom:0;width:320px;background:var(--panel);border-left:1px solid var(--border);padding:20px 18px 24px;transform:translateX(100%);transition:transform .4s cubic-bezier(.22,1,.36,1);z-index:21;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.sp.on{transform:translateX(0)}
+.sp-hd{display:flex;justify-content:space-between;align-items:center}
+.sp-ttl{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
 
-/* Screens */
-.sc-wrap{flex:1;position:relative;overflow:hidden;}
-.screen{
-  position:absolute;inset:0;background:var(--phone);
-  transform:translateX(100%);
-  transition:transform .38s cubic-bezier(0.4,0,0.2,1);
-  display:flex;flex-direction:column;z-index:1;
-}
-.screen.active{transform:translateX(0);z-index:10;}
-.screen.behind{transform:translateX(-22%) scale(0.96);z-index:5;}
-#s-home{
-  background:linear-gradient(165deg,var(--w1) 0%,var(--w2) 100%);
-  transform:translateX(0);z-index:1;
-}
+/* Presets */
+.presets-label{font-size:8.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim);margin-bottom:2px}
+.presets{display:flex;flex-wrap:wrap;gap:5px}
+.preset{padding:4px 10px;border-radius:100px;border:1px solid var(--border);background:none;color:var(--dim);font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.08em;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.preset:hover{border-color:var(--border2);color:var(--text)}
 
-/* Home indicator */
-.hi{height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--phone);}
-.hi-pill{width:130px;height:5px;background:var(--text3);border-radius:3px;opacity:.4;}
+/* Detected badge */
+.detect-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;background:var(--ibg);border:1px solid var(--border)}
+.detect-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.detect-dot.anthropic{background:#c87941}
+.detect-dot.openai{background:#4a9f6a}
+.detect-txt{font-size:9.5px;color:var(--dim);letter-spacing:.05em}
+.detect-fmt{font-size:9px;color:var(--dim);opacity:.65;margin-left:auto;letter-spacing:.06em}
 
-/* === HOME === */
-.home-body{flex:1;display:flex;flex-direction:column;padding:0 0 10px;}
-.home-time{text-align:center;padding:22px 0 28px;}
-.home-clock{font-size:76px;font-weight:200;color:var(--text);letter-spacing:-4px;line-height:1;}
-.home-date{font-size:14px;color:var(--text2);margin-top:8px;font-weight:300;}
-.app-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:20px;padding:0 36px;flex:1;align-content:center;
-}
-.app-ico{display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;}
-.app-ico-bg{
-  width:76px;height:76px;border-radius:22px;
-  display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(145deg,var(--acc),var(--acc2));
-  box-shadow:0 6px 20px rgba(0,40,20,0.12);
-  transition:transform .15s;
-}
-.app-ico:active .app-ico-bg{transform:scale(0.88);}
-.app-ico-lbl{font-size:12px;color:var(--text);font-weight:400;}
-
-/* === NAV BAR === */
-.nav{
-  height:56px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 20px;flex-shrink:0;
-  background:var(--nav);backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  border-bottom:0.5px solid var(--bd2);
-  align-items:flex-end;padding-bottom:10px;
-}
-.nav-title{font-size:17px;font-weight:600;color:var(--text);}
-.nav-back{display:flex;align-items:center;gap:2px;color:var(--acc);cursor:pointer;font-size:15px;min-width:60px;}
-.nav-back svg{width:20px;height:20px;stroke:var(--acc);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
-.nav-act{color:var(--acc);font-size:15px;cursor:pointer;min-width:60px;text-align:right;font-weight:500;}
-
-/* === SCROLLABLE BODY === */
-.s-body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
-
-/* === CHAT === */
-.chat-msgs{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  padding:16px 16px 8px;display:flex;flex-direction:column;gap:10px;
-}
-.msg{max-width:78%;padding:10px 14px;border-radius:18px;font-size:15px;line-height:1.6;word-break:break-word;}
-.msg-ai{
-  align-self:flex-start;background:var(--surface2);
-  color:var(--text);border-bottom-left-radius:5px;
-  border:0.5px solid var(--bd2);
-}
-.msg-user{
-  align-self:flex-end;background:var(--acc);
-  color:#fff;border-bottom-right-radius:5px;
-}
-.msg-typing{color:var(--text3);font-style:italic;}
-.ai-row{display:flex;gap:8px;align-items:flex-end;align-self:flex-start;max-width:85%;}
-.ai-av{
-  width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(145deg,var(--acc),var(--acc2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;flex-shrink:0;color:#fff;font-weight:500;
-  overflow:hidden;
-}
-.ai-av img{width:100%;height:100%;object-fit:cover;}
-.chat-bar{
-  padding:10px 14px;background:var(--nav);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-top:0.5px solid var(--bd2);flex-shrink:0;
-  display:flex;gap:10px;align-items:flex-end;
-}
-.chat-bar textarea{
-  flex:1;padding:9px 14px;border:1px solid var(--bd2);
-  border-radius:22px;font-size:15px;font-family:inherit;
-  color:var(--text);background:var(--surface);outline:none;
-  resize:none;min-height:40px;max-height:100px;line-height:1.5;
-  transition:border-color .2s;
-}
-.chat-bar textarea:focus{border-color:var(--acc);}
-.chat-send{
-  width:40px;height:40px;border-radius:50%;background:var(--acc);
-  border:none;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:background .2s,transform .15s;flex-shrink:0;
-}
-.chat-send:active{transform:scale(0.88);}
-.chat-send svg{width:18px;height:18px;fill:#fff;}
-
-/* Thinking badge */
-.thinking-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:11px;color:var(--acc);background:var(--accb);
-  border-radius:8px;padding:2px 8px;margin:0 16px 4px;
-  align-self:flex-start;border:0.5px solid var(--bd2);
-}
-.thinking-badge.off{opacity:.4;}
-
-/* === MEMO === */
-.memo-list{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
-.memo-card{
-  background:var(--surface);border-radius:16px;
-  border:0.5px solid var(--bd2);padding:14px 16px;cursor:pointer;
-  transition:background .2s,transform .15s;
-}
-.memo-card:active{transform:scale(0.98);background:var(--surface2);}
-.memo-card-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px;}
-.memo-card-preview{font-size:13px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.memo-card-date{font-size:12px;color:var(--text3);margin-top:6px;}
-.memo-empty{text-align:center;color:var(--text3);padding:60px 20px;font-size:15px;}
-.fab{
-  position:absolute;bottom:50px;right:20px;
-  width:54px;height:54px;border-radius:50%;
-  background:var(--acc);border:none;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 18px rgba(79,144,104,0.4);cursor:pointer;
-  transition:transform .15s;z-index:20;
-}
-.fab:active{transform:scale(0.9);}
-.fab svg{width:24px;height:24px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;}
-
-/* === MODAL === */
-.modal{
-  position:absolute;inset:0;z-index:50;
-  background:var(--phone);display:flex;flex-direction:column;
-  transform:translateY(100%);transition:transform .36s cubic-bezier(0.4,0,0.2,1);
-}
-.modal.open{transform:translateY(0);}
-.modal-nav{
-  height:56px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;border-bottom:0.5px solid var(--bd2);flex-shrink:0;
-}
-.modal-title{font-size:17px;font-weight:600;color:var(--text);}
-.modal-close{color:var(--acc);font-size:15px;cursor:pointer;font-weight:500;}
-.modal-save{color:var(--acc);font-size:15px;cursor:pointer;font-weight:700;}
-.modal-body{flex:1;overflow-y:auto;padding:16px;}
-.modal-input-title{
-  width:100%;font-size:20px;font-weight:500;font-family:inherit;
-  color:var(--text);background:transparent;border:none;outline:none;
-  margin-bottom:12px;padding:0;
-}
-.modal-input-title::placeholder{color:var(--text3);}
-.modal-input-body{
-  width:100%;font-size:15px;font-family:inherit;
-  color:var(--text);background:transparent;border:none;outline:none;
-  resize:none;min-height:300px;line-height:1.8;padding:0;
-}
-.modal-input-body::placeholder{color:var(--text3);}
-.modal-view-title{font-size:22px;font-weight:600;color:var(--text);margin-bottom:8px;}
-.modal-view-date{font-size:13px;color:var(--text3);margin-bottom:20px;}
-.modal-view-body{font-size:15px;color:var(--text);line-height:1.9;white-space:pre-wrap;}
-.del-btn{
-  padding:8px 16px;border-radius:10px;background:rgba(220,60,60,0.1);
-  color:#E05050;border:none;font-size:14px;font-family:inherit;cursor:pointer;
-  transition:background .2s;
-}
-.del-btn:hover{background:rgba(220,60,60,0.2);}
-
-/* === DIARY === */
-.diary-tabs{
-  display:flex;border-bottom:0.5px solid var(--bd2);flex-shrink:0;
-  background:var(--phone);
-}
-.diary-tab{
-  flex:1;padding:12px 0;font-size:14px;text-align:center;cursor:pointer;
-  color:var(--text2);border-bottom:2px solid transparent;transition:all .2s;
-  font-weight:400;
-}
-.diary-tab.act{color:var(--acc);border-bottom-color:var(--acc);font-weight:500;}
-.diary-pane{display:none;flex:1;overflow-y:auto;padding:14px 16px;}
-.diary-pane.act{display:block;}
-.diary-card{
-  background:var(--surface);border-radius:16px;
-  border:0.5px solid var(--bd2);padding:14px 16px;
-  margin-bottom:10px;cursor:pointer;transition:background .2s;
-}
-.diary-card:active{background:var(--surface2);}
-.diary-card-date{font-size:12px;color:var(--acc);font-weight:500;margin-bottom:6px;}
-.diary-card-preview{font-size:14px;color:var(--text);line-height:1.6;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.diary-card-mood{font-size:18px;margin-top:6px;}
-.diary-empty{text-align:center;color:var(--text3);padding:50px 20px;font-size:14px;line-height:1.8;}
-.ai-diary-gen{
-  margin:0 0 16px;padding:14px 16px;
-  background:var(--accb);border-radius:16px;border:0.5px solid var(--bd2);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.ai-diary-gen-text{font-size:13px;color:var(--text2);line-height:1.5;}
-.ai-diary-gen-btn{
-  padding:8px 14px;background:var(--acc);color:#fff;border:none;
-  border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;
-  white-space:nowrap;flex-shrink:0;transition:background .2s;
-}
-.ai-diary-gen-btn:disabled{background:var(--text3);cursor:not-allowed;}
-
-/* === SETTINGS === */
-.settings-body{padding:16px;}
-.settings-section{margin-bottom:24px;}
-.settings-section-title{
-  font-size:12px;color:var(--acc);font-weight:600;
-  letter-spacing:0.8px;text-transform:uppercase;
-  padding:0 4px;margin-bottom:8px;
-}
-.settings-group{
-  background:var(--surface);border-radius:16px;
-  border:0.5px solid var(--bd2);overflow:hidden;
-}
-.settings-row{
-  display:flex;align-items:center;padding:14px 16px;
-  border-bottom:0.5px solid var(--bd);gap:12px;
-  min-height:52px;
-}
-.settings-row:last-child{border-bottom:none;}
-.settings-row-label{font-size:15px;color:var(--text);flex:1;}
-.settings-row-val{font-size:14px;color:var(--text2);}
-.settings-arrow{color:var(--text3);font-size:16px;}
-.settings-input{
-  width:100%;font-size:14px;font-family:inherit;
-  color:var(--text);background:transparent;border:none;outline:none;
-  padding:0;text-align:right;
-}
-.settings-input::placeholder{color:var(--text3);}
-.settings-textarea{
-  width:100%;font-size:14px;font-family:inherit;
-  color:var(--text);background:transparent;border:none;outline:none;
-  resize:none;padding:0;min-height:80px;line-height:1.7;
-}
-.settings-textarea::placeholder{color:var(--text3);}
-.settings-textarea-row{
-  display:block;padding:14px 16px;
-  border-bottom:0.5px solid var(--bd);
-}
-.settings-textarea-row:last-child{border-bottom:none;}
-.settings-textarea-label{font-size:12px;color:var(--text3);margin-bottom:8px;}
-.toggle{
-  width:50px;height:28px;border-radius:14px;
-  background:var(--text3);position:relative;cursor:pointer;
-  transition:background .3s;flex-shrink:0;border:none;
-}
-.toggle.on{background:var(--acc);}
-.toggle-knob{
-  position:absolute;top:3px;left:3px;
-  width:22px;height:22px;border-radius:50%;background:#fff;
-  transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,0.2);
-}
-.toggle.on .toggle-knob{transform:translateX(22px);}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#ccc;margin-right:6px;}
-.status-dot.ok{background:#4CAF50;}
-.api-status-row{display:flex;align-items:center;padding:8px 16px;font-size:12px;color:var(--text3);}
-
-/* Color theme swatches */
-.color-swatches{display:flex;gap:12px;align-items:center;}
-.color-swatch{
-  width:28px;height:28px;border-radius:50%;cursor:pointer;
-  transition:transform .15s,box-shadow .15s;
-  border:2.5px solid transparent;
-  box-sizing:border-box;
-  flex-shrink:0;
-}
-.color-swatch.sel{
-  border-color:var(--text);
-  transform:scale(1.2);
-  box-shadow:0 2px 8px rgba(0,0,0,0.18);
-}
-
-/* Loading animation */
-@keyframes dots{0%,80%,100%{opacity:.2}40%{opacity:1}}
-.dot1,.dot2,.dot3{animation:dots 1.2s infinite;}
-.dot2{animation-delay:.2s}.dot3{animation-delay:.4s}
-
-/* Scrollbars */
-::-webkit-scrollbar{width:3px;}
-::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px;}
-::-webkit-scrollbar-track{background:transparent;}
-
-/* === COMMENTS === */
-.comment-section{margin-top:18px;padding-top:16px;border-top:0.5px solid var(--bd2);}
-.comment-title{font-size:12px;color:var(--text3);font-weight:500;margin-bottom:10px;letter-spacing:.5px;}
-.comment-item{background:var(--surface);border-radius:12px;padding:10px 13px;margin-bottom:8px;border:0.5px solid var(--bd);}
-.comment-item-author{font-size:11px;color:var(--acc);margin-bottom:4px;font-weight:500;}
-.comment-item-text{font-size:14px;color:var(--text);line-height:1.6;}
-.comment-input-row{display:flex;gap:8px;margin-top:10px;align-items:center;}
-.comment-input{flex:1;padding:9px 12px;border:1px solid var(--bd2);border-radius:12px;font-size:14px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;transition:border-color .2s;}
-.comment-input:focus{border-color:var(--acc);}
-.comment-send-btn{padding:9px 14px;background:var(--acc);color:#fff;border:none;border-radius:12px;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.ai-comment-btn{padding:7px 13px;background:var(--accb);color:var(--acc);border:1px solid var(--bd2);border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;transition:background .2s;}
-.ai-comment-btn:hover{background:var(--surface2);}
-
-/* === MOOD EDITOR === */
-.mood-item-wrap{position:relative;display:inline-flex;}
-.mood-remove{position:absolute;top:-5px;right:-5px;background:#E05050;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;font-weight:700;z-index:2;border:1.5px solid var(--phone);}
-.mood-add-btn{font-size:16px;cursor:pointer;padding:4px;border-radius:8px;background:var(--accb);border:1px dashed var(--bd2);display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;color:var(--acc);transition:background .2s;}
-
-/* === CHAT BG === */
-.chat-msgs{background-size:cover;background-position:center;transition:background .3s;}
-
-/* === AVATAR PREVIEW === */
-.avatar-preview-wrap{
-  display:flex;align-items:center;gap:12px;padding:12px 16px;
-  border-bottom:0.5px solid var(--bd);
-}
-.avatar-preview-circle{
-  width:48px;height:48px;border-radius:50%;
-  background:linear-gradient(145deg,var(--acc),var(--acc2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;color:#fff;font-weight:500;overflow:hidden;flex-shrink:0;
-}
-.avatar-preview-circle img{width:100%;height:100%;object-fit:cover;}
-.avatar-upload-label{
-  color:var(--acc);cursor:pointer;font-size:14px;font-weight:500;
-  padding:7px 14px;background:var(--accb);border-radius:10px;
-  border:0.5px solid var(--bd2);
-}
-
-/* Danger button */
-.danger-row-btn{
-  padding:7px 14px;background:rgba(220,60,60,0.08);
-  color:#E05050;border:0.5px solid rgba(220,60,60,0.15);
-  border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer;
-}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld label{font-size:8.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim)}
+.fld input,.fld select{background:var(--ibg);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:11px;font-family:'DM Mono',monospace;font-weight:300;outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none;appearance:none}
+.fld input:focus,.fld select:focus{border-color:var(--border2)}
+hr.dv{border:none;border-top:1px solid var(--border)}
+.savebtn{padding:10px;border-radius:100px;border:none;background:var(--btn);color:var(--btntxt);font-size:9.5px;font-family:'DM Mono',monospace;letter-spacing:.12em;cursor:pointer;transition:opacity .2s;margin-top:auto}
+.savebtn:hover{opacity:.75}
+.snote{font-size:9.5px;color:var(--dim);line-height:1.7}
 </style>
 </head>
 <body>
-<div class="pwrap">
-<div class="phone" id="phone">
-  <div class="di"></div>
-
-  <!-- Screens -->
-  <div class="sc-wrap" id="scwrap">
-
-    <!-- HOME -->
-    <div class="screen" id="s-home">
-      <div class="sb">
-        <span class="sb-time" id="sb-time-home"></span>
-        <div class="sb-icons">
-          <svg viewBox="0 0 24 24"><path d="M1 6.5C1 6.5 5 2 12 2s11 4.5 11 4.5M5 10.5S7.5 7 12 7s7 3.5 7 3.5M9 14.5S10.5 12 12 12s3 2.5 3 2.5M12 19h.01"/></svg>
-          <svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="11" rx="2"/><path d="M18 10h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2"/></svg>
-        </div>
-      </div>
-      <div class="home-body">
-        <div class="home-time">
-          <div class="home-clock" id="home-clock"></div>
-          <div class="home-date" id="home-date"></div>
-        </div>
-        <div class="app-grid">
-          <div class="app-ico" onclick="nav('chat')">
-            <div class="app-ico-bg">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </div>
-            <span class="app-ico-lbl">微Chat</span>
-          </div>
-          <div class="app-ico" onclick="nav('memo')">
-            <div class="app-ico-bg">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            </div>
-            <span class="app-ico-lbl">备忘录</span>
-          </div>
-          <div class="app-ico" onclick="nav('diary')">
-            <div class="app-ico-bg">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            </div>
-            <span class="app-ico-lbl">心情日记</span>
-          </div>
-          <div class="app-ico" onclick="nav('settings')">
-            <div class="app-ico-bg">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </div>
-            <span class="app-ico-lbl">设置</span>
-          </div>
-        </div>
-      </div>
+<div class="app">
+  <header>
+    <div class="mark">
+      <span class="mark-a">Your Voice</span>
+      <span class="mark-b">V1.0</span>
     </div>
-
-    <!-- CHAT -->
-    <div class="screen" id="s-chat">
-      <div class="sb"><span class="sb-time" id="sb-time-chat"></span></div>
-      <div class="nav">
-        <div class="nav-back" onclick="goBack()">
-          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>返回
-        </div>
-        <div class="nav-title" id="chat-nav-title">微Chat</div>
-        <div style="display:flex;align-items:center;gap:10px;min-width:60px;justify-content:flex-end">
-          <span onclick="openChatSettings()" style="color:var(--acc);cursor:pointer;font-size:18px;line-height:1">⚙</span>
-        </div>
-      </div>
-      <!-- Thinking indicator -->
-      <div id="thinking-bar" style="display:none;padding:4px 16px 2px;flex-shrink:0;">
-        <span class="thinking-badge" id="thinking-badge">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          深度思考模式
-        </span>
-      </div>
-      <div class="chat-msgs" id="chat-msgs"></div>
-      <div class="chat-bar">
-        <textarea id="chat-input" placeholder="说说话..." rows="1" onkeydown="chatKey(event)" oninput="autoH(this)"></textarea>
-        <button class="chat-send" id="chat-send" onclick="sendMsg()">
-          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
-      </div>
-      <!-- Chat Settings Modal -->
-      <div class="modal" id="chat-settings-modal">
-        <div class="modal-nav">
-          <div class="modal-close" onclick="closeChatSettings()">取消</div>
-          <div class="modal-title">聊天设置</div>
-          <div class="modal-save" onclick="saveChatSettings()">保存</div>
-        </div>
-        <div class="modal-body">
-          <div class="settings-section">
-            <div class="settings-section-title">头像</div>
-            <div class="settings-group">
-              <!-- Avatar preview & image upload -->
-              <div class="avatar-preview-wrap">
-                <div class="avatar-preview-circle" id="cs-avatar-preview">他</div>
-                <div style="flex:1">
-                  <div style="font-size:14px;color:var(--text);margin-bottom:6px">自定义头像</div>
-                  <div style="display:flex;gap:8px;flex-wrap:wrap">
-                    <label class="avatar-upload-label">
-                      选择图片
-                      <input type="file" accept="image/*" id="cs-avatar-file" style="display:none" onchange="handleAvatarImg(this)">
-                    </label>
-                    <span onclick="clearAvatarImg()" id="cs-avatar-clear" style="display:none;color:#E05050;cursor:pointer;font-size:14px;padding:7px 14px;background:rgba(220,60,60,0.08);border-radius:10px;border:0.5px solid rgba(220,60,60,0.15)">移除图片</span>
-                  </div>
-                </div>
-              </div>
-              <div class="settings-row">
-                <span class="settings-row-label">头像文字 / 表情</span>
-                <input class="settings-input" id="cs-avatar" type="text" maxlength="2" placeholder="他" style="max-width:60px;text-align:center;font-size:18px">
-              </div>
-            </div>
-          </div>
-          <div class="settings-section">
-            <div class="settings-section-title">备注名称</div>
-            <div class="settings-group">
-              <div class="settings-row">
-                <span class="settings-row-label">显示名称</span>
-                <input class="settings-input" id="cs-name" type="text" maxlength="10" placeholder="他" style="max-width:120px">
-              </div>
-            </div>
-          </div>
-          <div class="settings-section">
-            <div class="settings-section-title">思考模式</div>
-            <div class="settings-group">
-              <div class="settings-row">
-                <div style="flex:1">
-                  <div class="settings-row-label">🧠 深度思考</div>
-                  <div style="font-size:12px;color:var(--text3);margin-top:2px">开启后回复更深思熟虑（需模型支持）</div>
-                </div>
-                <button class="toggle" id="thinking-toggle" onclick="toggleThinkingTemp()"><div class="toggle-knob"></div></button>
-              </div>
-            </div>
-          </div>
-          <div class="settings-section">
-            <div class="settings-section-title">背景图片</div>
-            <div class="settings-group">
-              <div class="settings-row">
-                <span class="settings-row-label">选择背景</span>
-                <label style="color:var(--acc);cursor:pointer;font-size:14px;font-weight:500">
-                  选择图片
-                  <input type="file" accept="image/*" id="cs-bg-file" style="display:none" onchange="previewChatBg(this)">
-                </label>
-              </div>
-              <div id="cs-bg-preview" style="margin:0 16px 12px;border-radius:10px;overflow:hidden;display:none">
-                <img id="cs-bg-img" style="width:100%;max-height:120px;object-fit:cover;border-radius:10px">
-              </div>
-              <div class="settings-row" id="cs-bg-clear-row" style="display:none">
-                <span class="settings-row-label">移除背景</span>
-                <span style="color:#E05050;cursor:pointer;font-size:14px" onclick="clearChatBg()">移除</span>
-              </div>
-            </div>
-          </div>
-          <div class="settings-section">
-            <div class="settings-section-title">聊天管理</div>
-            <div class="settings-group">
-              <div class="settings-row">
-                <span class="settings-row-label">🗑️ 清空聊天记录</span>
-                <button class="danger-row-btn" onclick="clearChat()">清空</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MEMO -->
-    <div class="screen" id="s-memo">
-      <div class="sb"><span class="sb-time" id="sb-time-memo"></span></div>
-      <div class="nav">
-        <div class="nav-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
-        <div class="nav-title">备忘录</div>
-        <div class="nav-act" style="min-width:60px"></div>
-      </div>
-      <div class="s-body" id="memo-list-body">
-        <div class="memo-list" id="memo-list"></div>
-      </div>
-      <button class="fab" onclick="openMemoNew()">
-        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <div class="hbtns">
+      <button class="hbtn" id="tbtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       </button>
-      <!-- Memo Edit Modal -->
-      <div class="modal" id="memo-modal">
-        <div class="modal-nav">
-          <div class="modal-close" onclick="closeMemoModal()">取消</div>
-          <div class="modal-title" id="memo-modal-title">新备忘</div>
-          <div class="modal-save" onclick="saveMemo()">保存</div>
-        </div>
-        <div class="modal-body" id="memo-modal-body">
-          <input class="modal-input-title" id="memo-edit-title" placeholder="标题" maxlength="60"/>
-          <textarea class="modal-input-body" id="memo-edit-body" placeholder="在这里写下你的想法..."></textarea>
-        </div>
-      </div>
-      <!-- Memo View Modal -->
-      <div class="modal" id="memo-view-modal">
-        <div class="modal-nav">
-          <div class="modal-close" onclick="closeMemoView()">返回</div>
-          <div class="modal-title"></div>
-          <div class="modal-save" onclick="editFromView()">编辑</div>
-        </div>
-        <div class="modal-body">
-          <div class="modal-view-title" id="memo-view-title"></div>
-          <div class="modal-view-date" id="memo-view-date"></div>
-          <div class="modal-view-body" id="memo-view-body"></div>
-          <div class="comment-section">
-            <div class="comment-title">他的评论</div>
-            <div id="memo-ai-comment-box" style="display:none">
-              <div class="comment-item">
-                <div class="comment-item-author">他说</div>
-                <div class="comment-item-text" id="memo-ai-comment-text"></div>
-              </div>
-            </div>
-            <div id="memo-ai-comment-empty" style="font-size:13px;color:var(--text3);margin-bottom:8px">他还没有评论这条备忘</div>
-            <button class="ai-comment-btn" id="memo-comment-btn" onclick="genMemoComment()">✨ 让他来评论</button>
-          </div>
-          <br>
-          <button class="del-btn" onclick="deleteMemo()">删除此备忘</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- DIARY -->
-    <div class="screen" id="s-diary">
-      <div class="sb"><span class="sb-time" id="sb-time-diary"></span></div>
-      <div class="nav">
-        <div class="nav-back" onclick="goBack()"><svg viewBox="0 0 24 24" stroke="var(--acc)" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
-        <div class="nav-title">心情日记</div>
-        <div class="nav-act" style="min-width:60px"></div>
-      </div>
-      <div class="diary-tabs">
-        <div class="diary-tab act" id="dt-mine" onclick="switchDiaryTab('mine')">我的日记</div>
-        <div class="diary-tab" id="dt-ai" onclick="switchDiaryTab('ai')">他的日记</div>
-      </div>
-      <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
-        <div class="diary-pane act" id="dp-mine">
-          <div id="my-diary-list"></div>
-        </div>
-        <div class="diary-pane" id="dp-ai">
-          <div class="ai-diary-gen">
-            <div class="ai-diary-gen-text">让他写一篇今天的日记<br><span style="font-size:11px;opacity:.7">他会根据你的记录和回忆写下自己的感受</span></div>
-            <button class="ai-diary-gen-btn" id="ai-gen-btn" onclick="genAiDiary()">写日记</button>
-          </div>
-          <div id="ai-diary-list"></div>
-        </div>
-      </div>
-      <button class="fab" id="diary-fab" onclick="openDiaryNew()">
-        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <button class="hbtn" id="sbtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       </button>
-      <!-- Diary Write Modal -->
-      <div class="modal" id="diary-modal">
-        <div class="modal-nav">
-          <div class="modal-close" onclick="closeDiaryModal()">取消</div>
-          <div class="modal-title">写日记</div>
-          <div class="modal-save" onclick="saveDiaryEntry()">保存</div>
-        </div>
-        <div class="modal-body">
-          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;" id="mood-picker">
-            <span style="font-size:13px;color:var(--text2);align-self:center">心情：</span>
-            <div id="mood-btns-wrap" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
-            <span class="mood-add-btn" onclick="addMoodEmoji()" title="添加表情">＋</span>
-            <span onclick="toggleMoodEdit()" id="mood-edit-toggle" style="font-size:12px;color:var(--text3);cursor:pointer;align-self:center;margin-left:2px">编辑</span>
-          </div>
-          <textarea class="modal-input-body" id="diary-edit-body" placeholder="今天发生了什么？写下你的心情..."></textarea>
-        </div>
-      </div>
-      <!-- Diary View Modal -->
-      <div class="modal" id="diary-view-modal">
-        <div class="modal-nav">
-          <div class="modal-close" onclick="closeDiaryView()">返回</div>
-          <div class="modal-title" id="diary-view-who"></div>
-          <div id="diary-view-del" class="modal-save" style="color:#E05050" onclick="deleteDiaryEntry()">删除</div>
-        </div>
-        <div class="modal-body">
-          <div class="modal-view-date" id="diary-view-date"></div>
-          <div class="diary-card-mood" id="diary-view-mood" style="font-size:28px;margin-bottom:14px;"></div>
-          <div class="modal-view-body" id="diary-view-body"></div>
-          <div class="comment-section">
-            <div class="comment-title">评论</div>
-            <div id="diary-comments-list"></div>
-            <div id="diary-ai-comment-row" style="margin-bottom:8px;display:none">
-              <button class="ai-comment-btn" id="diary-ai-comment-btn" onclick="genDiaryAiComment()">✨ 让他来评论</button>
-            </div>
-            <div id="diary-user-comment-row" style="display:none">
-              <div class="comment-input-row">
-                <input class="comment-input" id="diary-comment-input" placeholder="写下你的评论..." maxlength="100">
-                <button class="comment-send-btn" onclick="submitDiaryComment()">发送</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
+  </header>
 
-    <!-- SETTINGS -->
-    <div class="screen" id="s-settings">
-      <div class="sb"><span class="sb-time" id="sb-time-settings"></span></div>
-      <div class="nav">
-        <div class="nav-back" onclick="goBack()"><svg viewBox="0 0 24 24" stroke="var(--acc)" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>返回</div>
-        <div class="nav-title">设置</div>
-        <div class="nav-act" onclick="saveSettings()" style="font-weight:700">保存</div>
-      </div>
-      <div class="s-body settings-body">
-
-        <!-- 外观 -->
-        <div class="settings-section">
-          <div class="settings-section-title">外观</div>
-          <div class="settings-group">
-            <div class="settings-row">
-              <span class="settings-row-label">🌓 夜间模式</span>
-              <button class="toggle" id="theme-toggle" onclick="toggleTheme()"><div class="toggle-knob"></div></button>
-            </div>
-            <div class="settings-row">
-              <span class="settings-row-label">🎨 主题颜色</span>
-              <div class="color-swatches">
-                <div class="color-swatch" id="swatch-green" onclick="setColorTheme('green')" style="background:linear-gradient(135deg,#68C48E,#4A9E72)" title="绿色"></div>
-                <div class="color-swatch" id="swatch-pink" onclick="setColorTheme('pink')" style="background:linear-gradient(135deg,#D4909C,#B87080)" title="粉色"></div>
-                <div class="color-swatch" id="swatch-purple" onclick="setColorTheme('purple')" style="background:linear-gradient(135deg,#9888D0,#7868B8)" title="紫色"></div>
-                <div class="color-swatch" id="swatch-blue" onclick="setColorTheme('blue')" style="background:linear-gradient(135deg,#6898C8,#5080A8)" title="蓝色"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- API -->
-        <div class="settings-section">
-          <div class="settings-section-title">API 连接</div>
-          <div class="settings-group">
-            <div class="settings-row">
-              <span class="settings-row-label">🔑 密钥</span>
-              <input class="settings-input" id="s-apikey" type="password" placeholder="sk-ant-..." style="max-width:180px">
-            </div>
-            <div class="settings-row">
-              <span class="settings-row-label">🌐 接口网址</span>
-              <input class="settings-input" id="s-apiurl" type="text" placeholder="https://api.anthropic.com" style="max-width:200px">
-            </div>
-          </div>
-          <div class="api-status-row"><div class="status-dot" id="api-status-dot"></div><span id="api-status-text">未配置</span></div>
-        </div>
-
-        <!-- 他的人设 -->
-        <div class="settings-section">
-          <div class="settings-section-title">他的人设</div>
-          <div class="settings-group">
-            <div class="settings-textarea-row">
-              <div class="settings-textarea-label">他的性格与说话风格</div>
-              <textarea class="settings-textarea" id="s-persona" rows="4" placeholder="例如：你是他，一个温柔体贴的AI伴侣…"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- 记忆库 -->
-        <div class="settings-section">
-          <div class="settings-section-title">记忆库</div>
-          <div class="settings-group">
-            <div class="settings-textarea-row">
-              <div class="settings-textarea-label">他的一些想法和记忆，可以AI自动更新，也可以手动修改</div>
-              <textarea class="settings-textarea" id="s-memory" rows="5" placeholder="例如：用户叫小明，24岁，住在北京，喜欢猫咪和抹茶…"></textarea>
-            </div>
-            <div class="settings-row" style="justify-content:flex-end">
-              <button onclick="aiUpdateMemory()" id="memory-update-btn" style="padding:7px 14px;background:var(--accb);color:var(--acc);border:1px solid var(--bd2);border-radius:10px;font-size:13px;font-family:inherit;cursor:pointer">✨ 让他更新记忆</button>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
+  <div class="stage">
+    <canvas id="cv"></canvas>
+    <div class="subs">
+      <div class="sub-en" id="se"></div>
+      <div class="sub-zh" id="sz"></div>
     </div>
+  </div>
 
-  </div><!-- /sc-wrap -->
+  <div class="foot">
+    <div class="status" id="st"></div>
+    <div class="badge" id="bg"></div>
+  </div>
 
-  <div class="hi"><div class="hi-pill"></div></div>
-</div>
+  <div class="inp-wrap">
+    <div class="inp-row">
+      <input class="inp" id="ti" type="text" placeholder="type or speak..." autocomplete="off" spellcheck="false">
+      <button class="mic" id="mb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0M12 19v3M8 22h8"/></svg>
+      </button>
+      <button class="send" id="snd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+    </div>
+  </div>
 </div>
 
-<style>
-.mood-btn{font-size:22px;cursor:pointer;padding:4px;border-radius:8px;transition:transform .15s;}
-.mood-btn:active{transform:scale(0.85);}
-.mood-btn.sel{background:var(--accb);}
-</style>
+<!-- Settings -->
+<div class="ov" id="ov"></div>
+<div class="sp" id="sp">
+  <div class="sp-hd">
+    <span class="sp-ttl">Settings</span>
+    <button class="hbtn" id="sc">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Quick presets -->
+  <div>
+    <div class="presets-label" style="margin-bottom:7px">Quick Presets</div>
+    <div class="presets">
+      <button class="preset" onclick="applyPreset('anthropic')">Anthropic</button>
+      <button class="preset" onclick="applyPreset('openai')">OpenAI</button>
+      <button class="preset" onclick="applyPreset('deepseek')">DeepSeek</button>
+      <button class="preset" onclick="applyPreset('deepseek_ant')">DeepSeek (Anthropic)</button>
+      <button class="preset" onclick="applyPreset('groq')">Groq</button>
+      <button class="preset" onclick="applyPreset('ollama')">Ollama</button>
+    </div>
+  </div>
+
+  <hr class="dv">
+
+  <!-- API Config -->
+  <div class="fld">
+    <label>API Base URL</label>
+    <input type="text" id="fu" placeholder="https://api.anthropic.com/v1" oninput="refreshDetect()">
+  </div>
+
+  <!-- Auto-detect badge -->
+  <div class="detect-row" id="det">
+    <div class="detect-dot" id="det-dot"></div>
+    <span class="detect-txt" id="det-txt"></span>
+    <span class="detect-fmt" id="det-fmt"></span>
+  </div>
+
+  <div class="fld">
+    <label>API Key</label>
+    <input type="password" id="fk" placeholder="your api key...">
+  </div>
+  <div class="fld">
+    <label>Model</label>
+    <input type="text" id="fm" placeholder="e.g. claude-sonnet-4-6 / gpt-4o / deepseek-chat">
+  </div>
+
+  <hr class="dv">
+
+  <div class="fld">
+    <label>ElevenLabs API Key</label>
+    <input type="password" id="ek" placeholder="...">
+  </div>
+  <div class="fld">
+    <label>Voice ID</label>
+    <input type="text" id="ev" placeholder="jaSvRYaJHY4hCfcE2gCB">
+  </div>
+
+  <hr class="dv">
+
+  <div class="fld">
+    <label>AI Response Language</label>
+    <select id="rpl">
+      <option value="en-US">English</option>
+      <option value="zh-CN">中文 普通话</option>
+      <option value="zh-TW">中文 繁體</option>
+      <option value="ja-JP">日本語</option>
+      <option value="ko-KR">한국어</option>
+      <option value="fr-FR">Français</option>
+      <option value="de-DE">Deutsch</option>
+      <option value="es-ES">Español</option>
+    </select>
+  </div>
+
+  <div class="fld">
+    <label>Recognition Language</label>
+    <select id="rl">
+      <option value="en-US">English (US)</option>
+      <option value="en-GB">English (UK)</option>
+      <option value="zh-CN">中文 普通话</option>
+      <option value="zh-TW">中文 繁體</option>
+      <option value="ja-JP">日本語</option>
+      <option value="ko-KR">한국어</option>
+    </select>
+  </div>
+
+  <p class="snote">Keys are stored only in your browser's localStorage and sent directly to each API — never anywhere else.</p>
+
+  <button class="savebtn" id="svb">Save & Close</button>
+</div>
 
 <script>
-// =========== STATE ===========
-let cfg = {
-  apikey:'', apiurl:'https://api.anthropic.com',
-  persona:'你是他，一个温柔体贴的AI伴侣。你关心用户的日常，记住他们分享的点滴，像贴心朋友一样陪伴他们。回复简洁温暖，偶尔使用表情符号。',
-  memory:'', theme:'light', colorTheme:'green',
-  chatAvatar:'他', chatAvatarImg:'', chatName:'他', chatBg:'',
-  thinkingMode:false,
-  customMoods:['😊','😢','😤','😴','🥳','😰','🤔','😌']
+const TAU = Math.PI * 2;
+
+// ── Config ────────────────────────────────────────────────────────────────────
+let C = {
+  apiUrl: 'https://api.anthropic.com/v1',
+  apiKey: '', model: 'claude-sonnet-4-6',
+  elKey: '', voiceId: 'jaSvRYaJHY4hCfcE2gCB',
+  theme: 'night', lang: 'en-US', respLang: 'en-US'
 };
-let chatHistory=[];
-let memos=[];
-let myDiary=[];
-let aiDiary=[];
-let screenStack=['home'];
-let editingMemoId=null;
-let viewingMemoId=null;
-let viewingDiaryId=null;
-let viewingDiaryType=null;
-let selectedMood='😊';
-let diaryTab='mine';
 
-// =========== INIT ===========
-function init(){
-  loadData();
-  updateClock();
-  setInterval(updateClock,10000);
-  renderChat();
-  renderMemos();
-  renderDiary();
-  applyTheme();
-  loadSettingsUI();
-  checkAutoDiary();
+const LANG_NAMES = {
+  'en-US': 'English', 'en-GB': 'English',
+  'zh-CN': 'Chinese', 'zh-TW': 'Chinese',
+  'ja-JP': 'Japanese', 'ko-KR': 'Korean',
+  'fr-FR': 'French', 'de-DE': 'German', 'es-ES': 'Spanish'
+};
+function getLangName(code) { return LANG_NAMES[code] || 'English'; }
+function isChinese(code) { return code && code.startsWith('zh'); }
+try { const s = localStorage.getItem('nv5'); if (s) Object.assign(C, JSON.parse(s)); } catch(e) {}
+const save = () => { try { localStorage.setItem('nv5', JSON.stringify(C)); } catch(e) {} };
+
+// ── Provider detection ────────────────────────────────────────────────────────
+const PRESETS = {
+  anthropic:    { url: 'https://api.anthropic.com/v1',          model: 'claude-sonnet-4-6',       label: 'Anthropic' },
+  openai:       { url: 'https://api.openai.com/v1',             model: 'gpt-4o',                  label: 'OpenAI' },
+  deepseek:     { url: 'https://api.deepseek.com/v1',           model: 'deepseek-chat',           label: 'DeepSeek' },
+  deepseek_ant: { url: 'https://api.deepseek.com/anthropic/v1', model: 'deepseek-chat',           label: 'DeepSeek (Anthropic)' },
+  groq:         { url: 'https://api.groq.com/openai/v1',        model: 'llama-3.3-70b-versatile', label: 'Groq' },
+  ollama:       { url: 'http://localhost:11434/v1',              model: 'llama3.2',                label: 'Ollama (local)' },
+};
+
+function detectFormat(url) {
+  if (!url) return null;
+  // any URL containing 'anthropic' uses Anthropic message format
+  if (url.includes('anthropic')) return 'anthropic';
+  return 'openai';
 }
 
-function loadData(){
-  try{
-    cfg=Object.assign(cfg,JSON.parse(localStorage.getItem('jj_cfg')||'{}'));
-    chatHistory=JSON.parse(localStorage.getItem('jj_chat')||'[]');
-    memos=JSON.parse(localStorage.getItem('jj_memos')||'[]');
-    myDiary=JSON.parse(localStorage.getItem('jj_my_diary')||'[]');
-    aiDiary=JSON.parse(localStorage.getItem('jj_ai_diary')||'[]');
-  }catch(e){}
-}
-
-function saveData(){
-  localStorage.setItem('jj_cfg',JSON.stringify(cfg));
-  localStorage.setItem('jj_chat',JSON.stringify(chatHistory));
-  localStorage.setItem('jj_memos',JSON.stringify(memos));
-  localStorage.setItem('jj_my_diary',JSON.stringify(myDiary));
-  localStorage.setItem('jj_ai_diary',JSON.stringify(aiDiary));
-}
-
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
-
-function fmtDate(ts){
-  const d=new Date(ts||Date.now());
-  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
-}
-
-function fmtDateShort(ts){
-  const d=new Date(ts||Date.now());
-  return `${d.getMonth()+1}月${d.getDate()}日`;
-}
-
-// =========== CLOCK ===========
-function updateClock(){
-  const now=new Date();
-  const h=now.getHours().toString().padStart(2,'0');
-  const m=now.getMinutes().toString().padStart(2,'0');
-  const timeStr=`${h}:${m}`;
-  document.querySelectorAll('[id^="sb-time"]').forEach(el=>el.textContent=timeStr);
-  document.getElementById('home-clock').textContent=timeStr;
-  const days=['日','一','二','三','四','五','六'];
-  document.getElementById('home-date').textContent=
-    `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 周${days[now.getDay()]}`;
-}
-
-// =========== NAVIGATION ===========
-function nav(name){
-  const cur=screenStack[screenStack.length-1];
-  if(cur===name) return;
-  const curEl=document.getElementById('s-'+cur);
-  const newEl=document.getElementById('s-'+name);
-  curEl.classList.remove('active');
-  curEl.classList.add('behind');
-  newEl.classList.add('active');
-  newEl.classList.remove('behind');
-  screenStack.push(name);
-  if(name==='diary'){checkAutoDiary();renderDiary();}
-  if(name==='memo') renderMemos();
-}
-
-function goBack(){
-  if(screenStack.length<=1) return;
-  const cur=screenStack[screenStack.length-1];
-  // If leaving settings without having saved, revert theme/color to last saved state
-  if(cur==='settings'){
-    loadData();
-    applyTheme();
-    loadSettingsUI();
+function detectLabel(url) {
+  if (!url) return { name: '—', fmt: '' };
+  for (const [k, v] of Object.entries(PRESETS)) {
+    if (url.startsWith(v.url.split('/v1')[0])) return { name: v.label, fmt: k === 'anthropic' ? 'Anthropic format' : 'OpenAI-compatible' };
   }
-  screenStack.pop();
-  const prev=screenStack[screenStack.length-1];
-  const curEl=document.getElementById('s-'+cur);
-  const prevEl=document.getElementById('s-'+prev);
-  curEl.classList.remove('active');
-  setTimeout(()=>curEl.classList.remove('behind'),400);
-  prevEl.classList.remove('behind');
-  prevEl.classList.add('active');
+  const fmt = detectFormat(url);
+  return { name: 'Custom', fmt: fmt === 'anthropic' ? 'Anthropic format' : 'OpenAI-compatible' };
 }
 
-// =========== THEME ===========
-function applyTheme(){
-  document.body.setAttribute('data-theme',cfg.theme);
-  document.body.setAttribute('data-color',cfg.colorTheme||'green');
-  const t=document.getElementById('theme-toggle');
-  if(t) t.classList.toggle('on',cfg.theme==='dark');
-  // Update color swatch selection
-  ['green','pink','purple','blue'].forEach(c=>{
-    const sw=document.getElementById('swatch-'+c);
-    if(sw) sw.classList.toggle('sel',c===(cfg.colorTheme||'green'));
-  });
+function refreshDetect() {
+  const url = document.getElementById('fu').value.trim();
+  const fmt = detectFormat(url);
+  const info = detectLabel(url);
+  const dot = document.getElementById('det-dot');
+  dot.className = 'detect-dot ' + (fmt || '');
+  document.getElementById('det-txt').textContent = info.name;
+  document.getElementById('det-fmt').textContent = info.fmt;
 }
 
-function toggleTheme(){
-  cfg.theme=cfg.theme==='light'?'dark':'light';
-  applyTheme();
-  // Do NOT saveData() here — only saved when user clicks 保存
+function applyPreset(key) {
+  const p = PRESETS[key];
+  document.getElementById('fu').value = p.url;
+  document.getElementById('fm').value = p.model;
+  refreshDetect();
 }
 
-function setColorTheme(c){
-  cfg.colorTheme=c;
-  applyTheme();
-  // Do NOT saveData() here — only saved when user clicks 保存
+// ── Theme ─────────────────────────────────────────────────────────────────────
+const applyTheme = () => {
+  document.body.dataset.theme = C.theme;
+  document.querySelector('#tbtn svg').innerHTML = C.theme === 'day'
+    ? '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="none" stroke="currentColor" stroke-width="1.4"/>'
+    : '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+};
+document.getElementById('tbtn').onclick = () => { C.theme = C.theme === 'night' ? 'day' : 'night'; save(); applyTheme(); };
+applyTheme();
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+const spEl = document.getElementById('sp'), ovEl = document.getElementById('ov');
+const closeS = () => { spEl.classList.remove('on'); ovEl.classList.remove('on'); };
+
+document.getElementById('sbtn').onclick = () => {
+  document.getElementById('fu').value = C.apiUrl;
+  document.getElementById('fk').value = C.apiKey;
+  document.getElementById('fm').value = C.model;
+  document.getElementById('ek').value = C.elKey;
+  document.getElementById('ev').value = C.voiceId;
+  document.getElementById('rl').value = C.lang;
+  document.getElementById('rpl').value = C.respLang;
+  refreshDetect();
+  spEl.classList.add('on'); ovEl.classList.add('on');
+};
+document.getElementById('sc').onclick = closeS;
+ovEl.onclick = closeS;
+
+document.getElementById('svb').onclick = () => {
+  C.apiUrl = document.getElementById('fu').value.trim() || 'https://api.anthropic.com/v1';
+  C.apiKey = document.getElementById('fk').value.trim();
+  C.model  = document.getElementById('fm').value.trim();
+  C.elKey  = document.getElementById('ek').value.trim();
+  C.voiceId = document.getElementById('ev').value.trim() || 'jaSvRYaJHY4hCfcE2gCB';
+  C.lang   = document.getElementById('rl').value;
+  C.respLang = document.getElementById('rpl').value;
+  if (recog) recog.lang = C.lang;
+  save(); closeS(); updateBadge(); setS('Saved', 2200);
+};
+
+// ── Status & badge ────────────────────────────────────────────────────────────
+let stT = null;
+const setS = (m, d = 0) => {
+  document.getElementById('st').innerHTML = m;
+  clearTimeout(stT);
+  if (d) stT = setTimeout(() => document.getElementById('st').innerHTML = '', d);
+};
+const updateBadge = () => {
+  const info = detectLabel(C.apiUrl);
+  const m = C.model ? C.model.split('-').slice(0, 4).join('-').toUpperCase() : '';
+  document.getElementById('bg').textContent = [info.name.toUpperCase(), m].filter(Boolean).join(' · ');
+};
+updateBadge();
+
+// ── Canvas blob ───────────────────────────────────────────────────────────────
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const DPR = window.devicePixelRatio || 1;
+let W, H, cx, cy;
+const resize = () => {
+  const s = Math.min(window.innerWidth * .62, window.innerHeight * .38, 270);
+  cv.style.width = s + 'px'; cv.style.height = s + 'px';
+  W = cv.width = Math.round(s * DPR); H = cv.height = Math.round(s * DPR);
+  cx = W / 2; cy = H / 2;
+};
+resize(); window.addEventListener('resize', resize);
+
+let actx = null, anl = null, fbuf = null, playing = false, src = null;
+const ensureACtx = async () => {
+  if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state === 'suspended') await actx.resume();
+};
+async function playBlob(blob) {
+  await ensureACtx();
+  const ab = await blob.arrayBuffer();
+  const abuf = await actx.decodeAudioData(ab);
+  if (src) { try { src.stop(); } catch(e) {} }
+  anl = actx.createAnalyser(); anl.fftSize = 512; anl.smoothingTimeConstant = .88;
+  fbuf = new Uint8Array(anl.frequencyBinCount);
+  src = actx.createBufferSource(); src.buffer = abuf;
+  src.connect(anl); anl.connect(actx.destination);
+  playing = true; src.start(0);
+  src.onended = () => { playing = false; anl = null; fbuf = null; setS(''); };
 }
 
-// =========== SETTINGS ===========
-function loadSettingsUI(){
-  document.getElementById('s-apikey').value=cfg.apikey;
-  document.getElementById('s-apiurl').value=cfg.apiurl;
-  document.getElementById('s-persona').value=cfg.persona;
-  document.getElementById('s-memory').value=cfg.memory;
-  applyTheme();
-  updateApiStatus();
+let T = 0;
+function getAmp() {
+  if (!anl || !fbuf || !playing) return 0;
+  anl.getByteFrequencyData(fbuf);
+  let s = 0; for (let i = 0; i < Math.min(32, fbuf.length); i++) s += fbuf[i];
+  return s / (32 * 255);
+}
+function drawBlob(x, y, r, maxA, col) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0,   `rgba(${col},${maxA})`);
+  g.addColorStop(.22, `rgba(${col},${maxA * .76})`);
+  g.addColorStop(.42, `rgba(${col},${maxA * .46})`);
+  g.addColorStop(.62, `rgba(${col},${maxA * .18})`);
+  g.addColorStop(.82, `rgba(${col},${maxA * .04})`);
+  g.addColorStop(1,   `rgba(${col},0)`);
+  ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fillStyle = g; ctx.fill();
+}
+function drawFrame() {
+  ctx.clearRect(0, 0, W, H); T += .007;
+  const amp = getAmp();
+  const R = Math.min(W, H) / 2;
+  const col = C.theme === 'night' ? '215,208,193' : '22,18,12';
+  const br = 1 + Math.sin(T * .85) * .03 + Math.cos(T * .52) * .018;
+  const baseR = R * .52 * br * (1 + amp * .6);
+  drawBlob(cx, cy, baseR, .44 + amp * .28, col);
+  drawBlob(cx + Math.sin(T * .58) * R * .08, cy + Math.cos(T * .44) * R * .07, baseR * .65, .20 + amp * .16, col);
+  drawBlob(cx + Math.cos(T * .82 + 1.1) * R * .055, cy + Math.sin(T * .67 + .9) * R * .055, baseR * .4, .11 + amp * .1, col);
+  if (amp > .04) drawBlob(cx, cy, R * .88 * (1 + amp * .22), amp * .09, col);
+  requestAnimationFrame(drawFrame);
+}
+drawFrame();
+
+// ── AI ────────────────────────────────────────────────────────────────────────
+let hist = [], busy = false;
+
+function buildSYS() {
+  const lang = getLangName(C.respLang || 'en-US');
+  return `You are a warm, thoughtful AI voice companion. You MUST follow these rules without exception:
+1. The "reply" field must contain ONLY ${lang}. Never include any Chinese characters in "reply".
+2. The "chinese" field must contain the Chinese translation of your reply — mandatory, never omit it.
+3. Keep responses concise (2-3 sentences) and natural, as they will be spoken aloud.
+4. Always respond in ${lang} regardless of what language the user speaks.
+
+Respond with ONLY valid JSON, no markdown, no extra text outside the JSON:
+{"reply":"[${lang} only, no Chinese]","chinese":"[Chinese translation only]"}`;
 }
 
-function saveSettings(){
-  cfg.apikey=document.getElementById('s-apikey').value.trim();
-  cfg.apiurl=document.getElementById('s-apiurl').value.trim()||'https://api.anthropic.com';
-  cfg.persona=document.getElementById('s-persona').value.trim();
-  cfg.memory=document.getElementById('s-memory').value.trim();
-  saveData();
-  updateApiStatus();
-  showToast('设置已保存 ✓');
-}
-
-function updateApiStatus(){
-  const dot=document.getElementById('api-status-dot');
-  const txt=document.getElementById('api-status-text');
-  if(cfg.apikey){dot.classList.add('ok');txt.textContent='API 已配置';}
-  else{dot.classList.remove('ok');txt.textContent='请配置 API 密钥';}
-}
-
-// =========== THINKING MODE ===========
-function toggleThinking(){
-  cfg.thinkingMode=!cfg.thinkingMode;
-  const tog=document.getElementById('thinking-toggle');
-  if(tog) tog.classList.toggle('on',cfg.thinkingMode);
-  updateThinkingBar();
-  saveData();
-}
-
-function updateThinkingBar(){
-  const bar=document.getElementById('thinking-bar');
-  if(bar) bar.style.display=cfg.thinkingMode?'':'none';
-}
-
-// =========== AI CALL ===========
-async function callAI(messages,systemPrompt,maxTokens){
-  if(!cfg.apikey) throw new Error('请先在设置中配置 API 密钥');
-  const base=cfg.apiurl.replace(/\/$/,'');
-  const bodyObj={
-    model:'claude-sonnet-4-20250514',
-    max_tokens:maxTokens||1000,
-    system:systemPrompt,
-    messages
-  };
-  // Thinking mode: support both Anthropic and DeepSeek API formats
-  if(cfg.thinkingMode){
-    const url=(cfg.apiurl||'').toLowerCase();
-    const isDeepSeek=url.includes('deepseek');
-    if(isDeepSeek){
-      // DeepSeek Anthropic-compatible format
-      bodyObj.output_config={effort:'high'};
+async function translateToChinese(text) {
+  // Fallback: if model forgot to include Chinese, translate separately
+  try {
+    const fmt = detectFormat(C.apiUrl);
+    const prompt = `Translate the following text to Chinese. Reply with ONLY the Chinese translation, nothing else:\n"${text}"`;
+    if (fmt === 'anthropic') {
+      const r = await fetch(`${C.apiUrl}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': C.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify({ model: C.model, max_tokens: 200, messages: [{ role: 'user', content: prompt }] })
+      });
+      if (!r.ok) return '';
+      const d = await r.json();
+      return d.content[0].text.trim();
     } else {
-      // Anthropic extended thinking format
-      bodyObj.thinking={type:'enabled',budget_tokens:8000};
+      const r = await fetch(`${C.apiUrl}/chat/completions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${C.apiKey}` },
+        body: JSON.stringify({ model: C.model, max_tokens: 200, messages: [{ role: 'user', content: prompt }] })
+      });
+      if (!r.ok) return '';
+      const d = await r.json();
+      return d.choices[0].message.content.trim();
     }
-    if(bodyObj.max_tokens<10000) bodyObj.max_tokens=10000;
+  } catch(e) { return ''; }
+}
+
+function parseJ(raw) {
+  try {
+    const p = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    return {
+      reply:   p.reply || p.english || p.response || p.text || raw,
+      chinese: p.chinese || p.translation || p.zh || ''
+    };
   }
-  const resp=await fetch(base+'/v1/messages',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':cfg.apikey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body:JSON.stringify(bodyObj)
+  catch(e) { return { reply: raw, chinese: '' }; }
+}
+
+async function callAI(text) {
+  if (!C.apiKey) throw new Error('No API key — open ⚙ Settings');
+  if (!C.model)  throw new Error('No model set — open ⚙ Settings');
+  const fmt = detectFormat(C.apiUrl);
+  const SYS = buildSYS();
+
+  if (fmt === 'anthropic') {
+    hist.push({ role: 'user', content: text });
+    const r = await fetch(`${C.apiUrl}/messages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': C.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({ model: C.model, max_tokens: 512, system: SYS, messages: hist })
+    });
+    if (!r.ok) { const e = await r.json().catch(() => {}); throw new Error(e?.error?.message || `HTTP ${r.status}`); }
+    const d = await r.json();
+    const p = parseJ(d.content[0].text);
+    hist.push({ role: 'assistant', content: p.reply });
+    return p;
+
+  } else {
+    hist.push({ role: 'user', content: text });
+    const msgs = [{ role: 'system', content: SYS }, ...hist];
+    const r = await fetch(`${C.apiUrl}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${C.apiKey}` },
+      body: JSON.stringify({ model: C.model, max_tokens: 512, messages: msgs })
+    });
+    if (!r.ok) { const e = await r.json().catch(() => {}); throw new Error(e?.error?.message || `HTTP ${r.status}`); }
+    const d = await r.json();
+    const p = parseJ(d.choices[0].message.content);
+    hist.push({ role: 'assistant', content: p.reply });
+    return p;
+  }
+}
+
+async function callTTS(text) {
+  if (!C.elKey) throw new Error('No ElevenLabs key — open ⚙ Settings');
+  const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${C.voiceId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'xi-api-key': C.elKey },
+    body: JSON.stringify({ text, model_id: 'eleven_multilingual_v2', voice_settings: { stability: .45, similarity_boost: .8, style: .25, use_speaker_boost: true } })
   });
-  if(!resp.ok){
-    const e=await resp.json();
-    throw new Error(e.error?.message||'请求失败');
-  }
-  const d=await resp.json();
-  // Extract text block (may be after thinking block)
-  const textBlock=d.content.find(b=>b.type==='text');
-  return textBlock?textBlock.text:(d.content[0]?.text||'');
+  if (!r.ok) { const e = await r.json().catch(() => {}); throw new Error(e?.detail?.message || `ElevenLabs ${r.status}`); }
+  return await r.blob();
 }
 
-function buildSystem(){
-  let sys=cfg.persona||'你是他，一个温柔体贴的AI伴侣。';
-  if(cfg.memory) sys+='\n\n【关于用户的记忆】\n'+cfg.memory;
-  return sys;
+function showSubs(main, zh, forceShowZh = false) {
+  const e = document.getElementById('se'), z = document.getElementById('sz');
+  e.classList.remove('on'); z.classList.remove('on');
+  setTimeout(() => {
+    e.textContent = main || '';
+    z.textContent = zh || '';
+    if (main) e.classList.add('on');
+    // Always show Chinese subtitle if it has content
+    if (zh) z.classList.add('on');
+  }, 160);
 }
 
-// =========== AVATAR HELPER ===========
-function makeAvatarHTML(size){
-  const sz=size||32;
-  if(cfg.chatAvatarImg){
-    return `<div class="ai-av" style="width:${sz}px;height:${sz}px"><img src="${cfg.chatAvatarImg}" alt=""></div>`;
-  }
-  return `<div class="ai-av" style="width:${sz}px;height:${sz}px">${esc(cfg.chatAvatar||'他')}</div>`;
+async function send(text) {
+  text = text.trim(); if (!text || busy) return;
+  busy = true; document.getElementById('snd').disabled = true;
+  document.getElementById('ti').value = '';
+  showSubs(text, '');
+  try {
+    setS('<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>');
+    const r = await callAI(text);
+    // Strip any Chinese characters that leaked into reply field
+    r.reply = r.reply.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uff00-\uffef\u3000-\u303f]/g, '').replace(/\s{2,}/g, ' ').trim();
+    // If model forgot Chinese, fetch it separately
+    if (!r.chinese && !isChinese(C.respLang)) {
+      r.chinese = await translateToChinese(r.reply);
+    }
+    showSubs(r.reply, r.chinese);
+    setS('Speaking...');
+    await playBlob(await callTTS(r.reply)); // TTS only reads reply, never Chinese
+  } catch(err) { setS(err.message, 5500); console.error(err); }
+  document.getElementById('snd').disabled = false; busy = false;
 }
 
-// =========== CHAT ===========
-function renderChat(){
-  const el=document.getElementById('chat-msgs');
-  if(cfg.chatBg){
-    el.style.backgroundImage=`url(${cfg.chatBg})`;
-  }else{
-    el.style.backgroundImage='';
-  }
-  if(!chatHistory.length){
-    el.innerHTML=`<div class="ai-row">${makeAvatarHTML(32)}<div class="msg msg-ai">嗨～今天怎么样？🌿</div></div>`;
-  }else{
-    el.innerHTML=chatHistory.map(m=>{
-      if(m.role==='user') return `<div class="msg msg-user">${esc(m.content)}</div>`;
-      return `<div class="ai-row">${makeAvatarHTML(32)}<div class="msg msg-ai">${esc(m.content)}</div></div>`;
-    }).join('');
-    el.scrollTop=el.scrollHeight;
-  }
-  // Update nav title
-  const nt=document.getElementById('chat-nav-title');
-  if(nt) nt.textContent=cfg.chatName||'他';
-  // Update thinking mode toggle
-  const tog=document.getElementById('thinking-toggle');
-  if(tog) tog.classList.toggle('on',!!cfg.thinkingMode);
-  updateThinkingBar();
-}
+document.getElementById('snd').onclick = () => send(document.getElementById('ti').value);
+document.getElementById('ti').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(e.target.value); } });
 
-function chatKey(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
-}
-
-function autoH(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,100)+'px';
-}
-
-let chatBusy=false;
-async function sendMsg(){
-  if(chatBusy) return;
-  const inp=document.getElementById('chat-input');
-  const text=inp.value.trim();
-  if(!text) return;
-  inp.value='';inp.style.height='auto';
-  chatHistory.push({role:'user',content:text});
-  chatBusy=true;
-  document.getElementById('chat-send').disabled=true;
-  const el=document.getElementById('chat-msgs');
-  el.innerHTML+=`<div class="msg msg-user">${esc(text)}</div>`;
-  const typingId='typing-'+Date.now();
-  el.innerHTML+=`<div class="ai-row" id="${typingId}">${makeAvatarHTML(32)}<div class="msg msg-ai msg-typing"><span class="dot1">●</span><span class="dot2">●</span><span class="dot3">●</span></div></div>`;
-  el.scrollTop=el.scrollHeight;
-  try{
-    const reply=await callAI(chatHistory.slice(-20),buildSystem());
-    chatHistory.push({role:'assistant',content:reply});
-    if(chatHistory.length>40) chatHistory=chatHistory.slice(-40);
-    saveData();
-    const t=document.getElementById(typingId);
-    if(t) t.outerHTML=`<div class="ai-row">${makeAvatarHTML(32)}<div class="msg msg-ai">${esc(reply)}</div></div>`;
-  }catch(e){
-    const t=document.getElementById(typingId);
-    if(t) t.outerHTML=`<div class="ai-row">${makeAvatarHTML(32)}<div class="msg msg-ai msg-typing">${esc(e.message)}</div></div>`;
-  }
-  chatBusy=false;
-  document.getElementById('chat-send').disabled=false;
-  el.scrollTop=el.scrollHeight;
-}
-
-function clearChat(){
-  if(!confirm('清空所有对话？')) return;
-  chatHistory=[];
-  saveData();
-  renderChat();
-  showToast('聊天记录已清空');
-}
-
-// =========== MEMO ===========
-function renderMemos(){
-  const el=document.getElementById('memo-list');
-  if(!memos.length){
-    el.innerHTML='<div class="memo-empty">✏️ 还没有备忘录<br>点击右下角 + 新建</div>';
-    return;
-  }
-  el.innerHTML=memos.slice().reverse().map(m=>`
-    <div class="memo-card" onclick="viewMemo('${m.id}')">
-      <div class="memo-card-title">${esc(m.title||'无标题')}</div>
-      <div class="memo-card-preview">${esc(m.body||'（空）')}</div>
-      <div class="memo-card-date">${fmtDate(m.ts)}</div>
-    </div>
-  `).join('');
-}
-
-function openMemoNew(){
-  editingMemoId=null;
-  document.getElementById('memo-edit-title').value='';
-  document.getElementById('memo-edit-body').value='';
-  document.getElementById('memo-modal-title').textContent='新备忘';
-  document.getElementById('memo-modal').classList.add('open');
-}
-
-function openMemoEdit(id){
-  const m=memos.find(x=>x.id===id);
-  if(!m) return;
-  editingMemoId=id;
-  document.getElementById('memo-edit-title').value=m.title;
-  document.getElementById('memo-edit-body').value=m.body;
-  document.getElementById('memo-modal-title').textContent='编辑备忘';
-  document.getElementById('memo-modal').classList.add('open');
-}
-
-function closeMemoModal(){
-  document.getElementById('memo-modal').classList.remove('open');
-}
-
-function saveMemo(){
-  const title=document.getElementById('memo-edit-title').value.trim();
-  const body=document.getElementById('memo-edit-body').value.trim();
-  if(!title&&!body){closeMemoModal();return;}
-  if(editingMemoId){
-    const m=memos.find(x=>x.id===editingMemoId);
-    if(m){m.title=title;m.body=body;m.ts=Date.now();}
-  }else{
-    memos.push({id:uid(),title,body,ts:Date.now()});
-  }
-  saveData();renderMemos();closeMemoModal();
-}
-
-function closeMemoView(){
-  document.getElementById('memo-view-modal').classList.remove('open');
-  viewingMemoId=null;
-}
-
-function editFromView(){
-  if(!viewingMemoId) return;
-  document.getElementById('memo-view-modal').classList.remove('open');
-  openMemoEdit(viewingMemoId);
-}
-
-function deleteMemo(){
-  if(!viewingMemoId) return;
-  if(!confirm('删除这条备忘？')) return;
-  memos=memos.filter(x=>x.id!==viewingMemoId);
-  saveData();renderMemos();closeMemoView();
-}
-
-// =========== DIARY ===========
-function switchDiaryTab(t){
-  diaryTab=t;
-  document.getElementById('dt-mine').classList.toggle('act',t==='mine');
-  document.getElementById('dt-ai').classList.toggle('act',t==='ai');
-  document.getElementById('dp-mine').classList.toggle('act',t==='mine');
-  document.getElementById('dp-ai').classList.toggle('act',t==='ai');
-  document.getElementById('diary-fab').style.display=t==='mine'?'':'none';
-}
-
-function renderDiary(){
-  const mine=document.getElementById('my-diary-list');
-  if(!myDiary.length){
-    mine.innerHTML='<div class="diary-empty">📖 还没有日记<br>点击右下角 + 记录今天的心情</div>';
-  }else{
-    mine.innerHTML=myDiary.slice().reverse().map(d=>`
-      <div class="diary-card" onclick="viewDiary('${d.id}','mine')">
-        <div class="diary-card-date">${fmtDate(d.ts)}</div>
-        <div class="diary-card-preview">${esc(d.body)}</div>
-        ${d.mood?`<div class="diary-card-mood">${d.mood}</div>`:''}
-      </div>
-    `).join('');
-  }
-  const ai=document.getElementById('ai-diary-list');
-  if(!aiDiary.length){
-    ai.innerHTML='<div class="diary-empty">🌿 他还没有写过日记<br>点击上方按钮让他写一篇吧</div>';
-  }else{
-    ai.innerHTML=aiDiary.slice().reverse().map(d=>`
-      <div class="diary-card" onclick="viewDiary('${d.id}','ai')">
-        <div class="diary-card-date">${fmtDate(d.ts)}</div>
-        <div class="diary-card-preview">${esc(d.body)}</div>
-      </div>
-    `).join('');
-  }
-}
-
-function pickMood(el){
-  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));
-  el.classList.add('sel');
-  selectedMood=el.textContent;
-}
-
-function openDiaryNew(){
-  document.getElementById('diary-edit-body').value='';
-  moodEditMode=false;
-  const toggle=document.getElementById('mood-edit-toggle');
-  if(toggle) toggle.textContent='编辑';
-  if(!cfg.customMoods||!cfg.customMoods.length) cfg.customMoods=['😊','😢','😤','😴','🥳','😰','🤔','😌'];
-  selectedMood=cfg.customMoods[0];
-  renderMoodBtns();
-  document.getElementById('diary-modal').classList.add('open');
-}
-
-function closeDiaryModal(){
-  document.getElementById('diary-modal').classList.remove('open');
-}
-
-function saveDiaryEntry(){
-  const body=document.getElementById('diary-edit-body').value.trim();
-  if(!body){closeDiaryModal();return;}
-  myDiary.push({id:uid(),body,mood:selectedMood,ts:Date.now()});
-  saveData();renderDiary();closeDiaryModal();
-}
-
-function viewDiary(id,type){
-  const arr=type==='mine'?myDiary:aiDiary;
-  const d=arr.find(x=>x.id===id);
-  if(!d) return;
-  viewingDiaryId=id;
-  viewingDiaryType=type;
-  document.getElementById('diary-view-who').textContent=type==='mine'?'我的日记':'他的日记';
-  document.getElementById('diary-view-date').textContent=fmtDate(d.ts);
-  document.getElementById('diary-view-mood').textContent=d.mood||'';
-  document.getElementById('diary-view-body').textContent=d.body;
-  document.getElementById('diary-view-del').style.display='';
-  renderDiaryComments(d);
-  document.getElementById('diary-ai-comment-row').style.display=type==='mine'?'':'none';
-  document.getElementById('diary-user-comment-row').style.display=type==='ai'?'':'none';
-  document.getElementById('diary-comment-input').value='';
-  document.getElementById('diary-view-modal').classList.add('open');
-}
-
-function renderDiaryComments(d){
-  const comments=d.comments||[];
-  const list=document.getElementById('diary-comments-list');
-  if(!comments.length){
-    list.innerHTML='<div style="font-size:13px;color:var(--text3);margin-bottom:8px">还没有评论</div>';
-  }else{
-    list.innerHTML=comments.map(c=>`
-      <div class="comment-item">
-        <div class="comment-item-author">${c.author==='ai'?'他说':'我说'}</div>
-        <div class="comment-item-text">${esc(c.text)}</div>
-      </div>
-    `).join('');
-  }
-}
-
-async function genDiaryAiComment(){
-  const arr=viewingDiaryType==='mine'?myDiary:aiDiary;
-  const d=arr.find(x=>x.id===viewingDiaryId);
-  if(!d) return;
-  if(!cfg.apikey){showToast('请先配置 API 密钥');return;}
-  const btn=document.getElementById('diary-ai-comment-btn');
-  btn.disabled=true;btn.textContent='思考中…';
-  try{
-    const prompt=`用户写了一篇日记：\n"${d.body}"\n\n请以第一人称（"他"的身份）写一条简短温暖的评论，表达你读完日记的感受和想法。字数限制在30字以内，直接写评论内容，不加引号。`;
-    const reply=await callAI([{role:'user',content:prompt}],buildSystem(),150);
-    if(!d.comments) d.comments=[];
-    d.comments.push({id:uid(),author:'ai',text:reply.slice(0,60),ts:Date.now()});
-    saveData();renderDiaryComments(d);
-  }catch(e){showToast('评论失败：'+e.message);}
-  btn.disabled=false;btn.textContent='✨ 让他来评论';
-}
-
-function submitDiaryComment(){
-  const input=document.getElementById('diary-comment-input');
-  const text=input.value.trim();
-  if(!text) return;
-  const arr=viewingDiaryType==='mine'?myDiary:aiDiary;
-  const d=arr.find(x=>x.id===viewingDiaryId);
-  if(!d) return;
-  if(!d.comments) d.comments=[];
-  d.comments.push({id:uid(),author:'me',text,ts:Date.now()});
-  input.value='';
-  saveData();renderDiaryComments(d);
-}
-
-function closeDiaryView(){
-  document.getElementById('diary-view-modal').classList.remove('open');
-  viewingDiaryId=null;
-}
-
-function deleteDiaryEntry(){
-  if(!viewingDiaryId) return;
-  if(!confirm('删除这篇日记？')) return;
-  if(viewingDiaryType==='mine') myDiary=myDiary.filter(x=>x.id!==viewingDiaryId);
-  else aiDiary=aiDiary.filter(x=>x.id!==viewingDiaryId);
-  saveData();renderDiary();closeDiaryView();
-}
-
-async function genAiDiary(){
-  if(!cfg.apikey){showToast('请先配置 API 密钥');return;}
-  const btn=document.getElementById('ai-gen-btn');
-  btn.disabled=true;btn.textContent='写作中…';
-  try{
-    const recent=myDiary.slice(-5).map(d=>`[${fmtDateShort(d.ts)}] ${d.mood||''} ${d.body}`).join('\n');
-    const recentChat=chatHistory.slice(-10).map(m=>`${m.role==='user'?'用户':'他'}：${m.content}`).join('\n');
-    const today=fmtDate(Date.now());
-    const prompt=`今天是${today}。\n\n用户最近的日记记录：\n${recent||'（暂无）'}\n\n最近的对话片段：\n${recentChat||'（暂无）'}\n\n用户记忆库：${cfg.memory||'（暂无）'}\n\n请以"他"的身份，写一篇今天的心情日记。要求：\n- 第一人称，写自己的感受和想法\n- 提到与用户的互动或对用户的关心\n- 温柔、细腻、有情感\n- 200-300字\n- 直接写日记内容，不加标题`;
-    const result=await callAI([{role:'user',content:prompt}],buildSystem(),800);
-    aiDiary.push({id:uid(),body:result,ts:Date.now(),comments:[]});
-    localStorage.setItem('jj_last_ai_diary',Date.now().toString());
-    saveData();renderDiary();
-    switchDiaryTab('ai');
-  }catch(e){showToast('生成失败：'+e.message);}
-  btn.disabled=false;btn.textContent='写日记';
-}
-
-function checkAutoDiary(){
-  if(cfg.diaryFreq==='manual') return;
-  const last=parseInt(localStorage.getItem('jj_last_ai_diary')||'0');
-  const now=Date.now();
-  const diff=now-last;
-  const threshold=cfg.diaryFreq==='daily'?86400000:604800000;
-  if(diff>threshold) genAiDiary();
-}
-
-// =========== UTILS ===========
-function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-}
-
-function showToast(msg){
-  let t=document.getElementById('toast');
-  if(!t){
-    t=document.createElement('div');
-    t.id='toast';
-    t.style.cssText='position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--acc);color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;z-index:9999;transition:opacity .3s;pointer-events:none;white-space:nowrap;font-family:Noto Sans SC,sans-serif;';
-    document.body.appendChild(t);
-  }
-  t.textContent=msg;
-  t.style.opacity='1';
-  clearTimeout(t._timer);
-  t._timer=setTimeout(()=>t.style.opacity='0',2200);
-}
-
-// =========== CHAT SETTINGS ===========
-// Temp vars for staged edits (only committed on 保存)
-let _tmpThinking=false;
-let _tmpAvatarImg=null; // null = unchanged, '' = cleared, string = new image
-let _tmpChatBg=null;    // null = unchanged, '' = cleared, string = new bg
-
-function openChatSettings(){
-  // Snapshot current values into temp vars
-  _tmpThinking=!!cfg.thinkingMode;
-  _tmpAvatarImg=null;
-  _tmpChatBg=null;
-
-  document.getElementById('cs-avatar').value=cfg.chatAvatar||'他';
-  document.getElementById('cs-name').value=cfg.chatName||'他';
-  updateAvatarPreviewUI();
-  const tog=document.getElementById('thinking-toggle');
-  if(tog) tog.classList.toggle('on',_tmpThinking);
-  const preview=document.getElementById('cs-bg-preview');
-  const clearRow=document.getElementById('cs-bg-clear-row');
-  if(cfg.chatBg){
-    document.getElementById('cs-bg-img').src=cfg.chatBg;
-    preview.style.display='';
-    clearRow.style.display='';
-  }else{
-    preview.style.display='none';
-    clearRow.style.display='none';
-  }
-  document.getElementById('chat-settings-modal').classList.add('open');
-}
-
-function closeChatSettings(){
-  // Discard all staged changes
-  _tmpThinking=false;
-  _tmpAvatarImg=null;
-  _tmpChatBg=null;
-  document.getElementById('chat-settings-modal').classList.remove('open');
-}
-
-function saveChatSettings(){
-  cfg.chatAvatar=document.getElementById('cs-avatar').value.trim()||'他';
-  cfg.chatName=document.getElementById('cs-name').value.trim()||'他';
-  // Apply staged thinking mode
-  cfg.thinkingMode=_tmpThinking;
-  // Apply staged avatar image
-  if(_tmpAvatarImg!==null) cfg.chatAvatarImg=_tmpAvatarImg;
-  // Apply staged chat bg
-  if(_tmpChatBg!==null) cfg.chatBg=_tmpChatBg;
-  saveData();renderChat();
-  closeChatSettings();
-  showToast('聊天设置已保存 ✓');
-}
-
-// Thinking toggle in chat settings modal — only updates temp state, not cfg
-function toggleThinkingTemp(){
-  _tmpThinking=!_tmpThinking;
-  const tog=document.getElementById('thinking-toggle');
-  if(tog) tog.classList.toggle('on',_tmpThinking);
-}
-
-function updateAvatarPreviewUI(){
-  const prev=document.getElementById('cs-avatar-preview');
-  if(!prev) return;
-  // Use staged image if set, otherwise fall back to cfg
-  const img=(_tmpAvatarImg!==null)?_tmpAvatarImg:cfg.chatAvatarImg;
-  if(img){
-    prev.innerHTML=`<img src="${img}" alt="" style="width:100%;height:100%;object-fit:cover">`;
-    document.getElementById('cs-avatar-clear').style.display='';
-  }else{
-    prev.innerHTML=esc(cfg.chatAvatar||'他');
-    document.getElementById('cs-avatar-clear').style.display='none';
-  }
-}
-
-function handleAvatarImg(input){
-  if(!input.files||!input.files[0]) return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    _tmpAvatarImg=e.target.result; // staged, not saved yet
-    updateAvatarPreviewUI();
+// ── Speech Recognition ────────────────────────────────────────────────────────
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recog = null, recOn = false;
+if (SR) {
+  recog = new SR(); recog.continuous = false; recog.interimResults = true; recog.lang = C.lang;
+  recog.onresult = e => {
+    const t = Array.from(e.results).map(r => r[0].transcript).join('');
+    document.getElementById('ti').value = t;
+    if (e.results[e.results.length - 1].isFinal) { stopRec(); send(t); }
   };
-  reader.readAsDataURL(input.files[0]);
+  recog.onend = stopRec; recog.onerror = stopRec;
 }
-
-function clearAvatarImg(){
-  _tmpAvatarImg=''; // staged clear
-  document.getElementById('cs-avatar-file').value='';
-  updateAvatarPreviewUI();
+function startRec() {
+  if (!recog) return setS('Speech recognition not supported', 4000);
+  recOn = true; document.getElementById('mb').classList.add('rec'); setS('Listening...');
+  try { recog.start(); } catch(e) {}
 }
-
-function previewChatBg(input){
-  if(!input.files||!input.files[0]) return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    _tmpChatBg=e.target.result; // staged, not saved yet
-    document.getElementById('cs-bg-img').src=_tmpChatBg;
-    document.getElementById('cs-bg-preview').style.display='';
-    document.getElementById('cs-bg-clear-row').style.display='';
-  };
-  reader.readAsDataURL(input.files[0]);
+function stopRec() {
+  recOn = false; document.getElementById('mb').classList.remove('rec');
+  if (document.getElementById('st').textContent === 'Listening...') setS('');
+  try { recog?.stop(); } catch(e) {}
 }
+document.getElementById('mb').onclick = () => recOn ? stopRec() : startRec();
 
-function clearChatBg(){
-  _tmpChatBg=''; // staged clear
-  document.getElementById('cs-bg-preview').style.display='none';
-  document.getElementById('cs-bg-clear-row').style.display='none';
-  document.getElementById('cs-bg-file').value='';
-}
-
-// =========== MEMO COMMENT ===========
-function viewMemo(id){
-  const m=memos.find(x=>x.id===id);
-  if(!m) return;
-  viewingMemoId=id;
-  document.getElementById('memo-view-title').textContent=m.title||'无标题';
-  document.getElementById('memo-view-date').textContent=fmtDate(m.ts);
-  document.getElementById('memo-view-body').textContent=m.body||'';
-  const box=document.getElementById('memo-ai-comment-box');
-  const empty=document.getElementById('memo-ai-comment-empty');
-  if(m.aiComment){
-    document.getElementById('memo-ai-comment-text').textContent=m.aiComment;
-    box.style.display='';empty.style.display='none';
-  }else{
-    box.style.display='none';empty.style.display='';
-  }
-  document.getElementById('memo-view-modal').classList.add('open');
-}
-
-async function genMemoComment(){
-  const m=memos.find(x=>x.id===viewingMemoId);
-  if(!m) return;
-  if(!cfg.apikey){showToast('请先配置 API 密钥');return;}
-  const btn=document.getElementById('memo-comment-btn');
-  btn.disabled=true;btn.textContent='思考中…';
-  try{
-    const prompt=`用户有一条备忘录，标题："${m.title||'无标题'}"，内容："${m.body||'（空）'}"。\n\n请以"他"的第一人称身份，写一条简短温暖的评论，分享你对这条备忘录的感想或关心。字数限制在30字以内，直接写评论内容。`;
-    const reply=await callAI([{role:'user',content:prompt}],buildSystem(),100);
-    m.aiComment=reply.slice(0,60);
-    saveData();
-    document.getElementById('memo-ai-comment-text').textContent=m.aiComment;
-    document.getElementById('memo-ai-comment-box').style.display='';
-    document.getElementById('memo-ai-comment-empty').style.display='none';
-  }catch(e){showToast('评论失败：'+e.message);}
-  btn.disabled=false;btn.textContent='✨ 让他来评论';
-}
-
-// =========== MOOD EDITOR ===========
-let moodEditMode=false;
-
-function renderMoodBtns(){
-  const wrap=document.getElementById('mood-btns-wrap');
-  if(!wrap) return;
-  const moods=cfg.customMoods||['😊','😢','😤','😴','🥳','😰','🤔','😌'];
-  wrap.innerHTML=moods.map((m,i)=>`
-    <div class="mood-item-wrap">
-      <span class="mood-btn" onclick="pickMood(this)">${m}</span>
-      ${moodEditMode?`<span class="mood-remove" onclick="removeMood(${i})">✕</span>`:''}
-    </div>
-  `).join('');
-  const btns=wrap.querySelectorAll('.mood-btn');
-  btns.forEach(b=>{if(b.textContent===selectedMood) b.classList.add('sel');});
-}
-
-function toggleMoodEdit(){
-  moodEditMode=!moodEditMode;
-  const toggle=document.getElementById('mood-edit-toggle');
-  if(toggle) toggle.textContent=moodEditMode?'完成':'编辑';
-  renderMoodBtns();
-}
-
-function removeMood(idx){
-  if((cfg.customMoods||[]).length<=1){showToast('至少保留一个表情');return;}
-  cfg.customMoods.splice(idx,1);
-  if(!cfg.customMoods.includes(selectedMood)) selectedMood=cfg.customMoods[0];
-  saveData();renderMoodBtns();
-}
-
-function addMoodEmoji(){
-  const emoji=prompt('输入一个表情符号：');
-  if(!emoji||!emoji.trim()) return;
-  const e=emoji.trim().slice(0,2);
-  if(!cfg.customMoods) cfg.customMoods=['😊'];
-  if(!cfg.customMoods.includes(e)){cfg.customMoods.push(e);saveData();}
-  renderMoodBtns();
-}
-
-// =========== MEMORY AI UPDATE ===========
-async function aiUpdateMemory(){
-  if(!cfg.apikey){showToast('请先配置 API 密钥');return;}
-  const btn=document.getElementById('memory-update-btn');
-  btn.disabled=true;btn.textContent='更新中…';
-  try{
-    const recentChat=chatHistory.slice(-20).map(m=>`${m.role==='user'?'用户':'他'}：${m.content}`).join('\n');
-    const myDiaryRecent=myDiary.slice(-5).map(d=>`[${fmtDateShort(d.ts)}] ${d.mood||''} ${d.body}`).join('\n');
-    const existing=cfg.memory||'';
-    const prompt=`你是一个AI伴侣（他），正在更新你对用户的记忆库。\n\n现有记忆：\n${existing||'（暂无）'}\n\n最近对话：\n${recentChat||'（暂无）'}\n\n用户最近日记：\n${myDiaryRecent||'（暂无）'}\n\n请根据以上信息，以第三人称视角整理更新你对用户的了解，包括性格、喜好、近况、重要事件等。\n格式：简洁的要点列表，每条以"- "开头，总字数200字以内。直接输出记忆内容，不加其他说明。`;
-    const result=await callAI([{role:'user',content:prompt}],buildSystem(),400);
-    cfg.memory=result;
-    document.getElementById('s-memory').value=result;
-    saveData();
-    showToast('记忆库已更新 ✓');
-  }catch(e){showToast('更新失败：'+e.message);}
-  btn.disabled=false;btn.textContent='✨ 让他更新记忆';
-}
-
-init();
+// ── Init ──────────────────────────────────────────────────────────────────────
+if (!C.apiKey) setS('Open ⚙ to add API keys');
 </script>
 </body>
 </html>
