@@ -2,17 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Your Voice">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d0d0b">
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Your%20Voice%22%2C%22short_name%22%3A%22Your%20Voice%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230d0d0b%22%2C%22theme_color%22%3A%22%230d0d0b%22%2C%22start_url%22%3A%22.%22%7D">
+<!-- iOS touch icon (inline SVG as data URI) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230d0d0b' rx='40'/%3E%3Ccircle cx='90' cy='90' r='36' fill='none' stroke='%23e8e3d8' stroke-width='1.5' opacity='.4'/%3E%3Ccircle cx='90' cy='90' r='20' fill='%23e8e3d8' opacity='.2'/%3E%3Ccircle cx='90' cy='90' r='8' fill='%23e8e3d8' opacity='.7'/%3E%3C/svg%3E">
 <title>Your Voice</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
 :root{
   --bg:#0d0d0b;--text:#e8e3d8;--dim:rgba(232,227,216,0.32);--dim2:rgba(232,227,216,0.55);
   --border:rgba(232,227,216,0.09);--border2:rgba(232,227,216,0.2);
   --blob:220,214,200;--ibg:rgba(232,227,216,0.04);--btn:#e8e3d8;--btntxt:#0d0d0b;
   --panel:#111110;--glass:rgba(0,0,0,0.62);
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
 }
 [data-theme=day]{
   --bg:#f2efe8;--text:#1a1714;--dim:rgba(26,23,20,0.35);--dim2:rgba(26,23,20,0.55);
@@ -21,17 +33,39 @@
   --panel:#ebe8e1;--glass:rgba(242,239,232,0.72);
 }
 
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-weight:300;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .5s,color .5s}
-.app{height:100vh;display:flex;flex-direction:column;align-items:center}
+html,body{
+  height:100%;background:var(--bg);color:var(--text);
+  font-family:'DM Mono',monospace;font-weight:300;overflow:hidden;
+  -webkit-font-smoothing:antialiased;transition:background .5s,color .5s;
+  /* Extend into notch/home areas */
+  background-attachment:fixed;
+}
 
-header{width:100%;display:flex;justify-content:space-between;align-items:flex-start;padding:18px 22px;flex-shrink:0}
+.app{
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;align-items:center;
+  /* Safe area padding */
+  padding-top:var(--sat);
+  padding-bottom:var(--sab);
+  padding-left:var(--sal);
+  padding-right:var(--sar);
+}
+
+header{width:100%;display:flex;justify-content:space-between;align-items:flex-start;padding:14px 20px;flex-shrink:0}
 .mark{display:flex;flex-direction:column;gap:3px}
 .mark-a{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
 .mark-b{font-size:8px;letter-spacing:.16em;color:var(--dim);opacity:.55}
 .hbtns{display:flex;gap:6px}
-.hbtn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;outline:none}
-.hbtn:hover{border-color:var(--border2);color:var(--text)}
-.hbtn svg{width:13px;height:13px;stroke-width:1.4}
+.hbtn{
+  width:38px;height:38px;border-radius:50%;border:1px solid var(--border);
+  background:none;color:var(--dim);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:border-color .2s,color .2s;outline:none;
+  /* Larger hit area for touch */
+  position:relative;
+}
+.hbtn::before{content:'';position:absolute;inset:-6px;border-radius:50%}
+.hbtn:active{background:var(--border);color:var(--text)}
+.hbtn svg{width:14px;height:14px;stroke-width:1.4}
 
 .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;gap:28px;padding:0 20px;min-height:0}
 canvas{display:block}
@@ -46,19 +80,28 @@ canvas{display:block}
 .status{font-size:8.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--dim);height:13px;text-align:center}
 .badge{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);opacity:.5}
 
-.inp-wrap{width:100%;max-width:520px;padding:0 22px 22px;flex-shrink:0}
-.inp-row{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:100px;padding:6px 6px 6px 18px;background:var(--ibg);transition:border-color .25s}
+.inp-wrap{width:100%;max-width:520px;padding:0 18px 16px;flex-shrink:0}
+.inp-row{display:flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:100px;padding:8px 8px 8px 20px;background:var(--ibg);transition:border-color .25s}
 .inp-row:focus-within{border-color:var(--border2)}
-.inp{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:'DM Mono',monospace;font-weight:300;letter-spacing:.02em}
+.inp{
+  flex:1;background:none;border:none;outline:none;color:var(--text);
+  font-size:16px;/* 16px prevents iOS zoom on focus */
+  font-family:'DM Mono',monospace;font-weight:300;letter-spacing:.02em;
+}
 .inp::placeholder{color:var(--dim)}
-.mic,.send{width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;outline:none;transition:opacity .2s,transform .15s,background .2s,border-color .2s}
-.mic svg,.send svg{width:13px;height:13px;stroke-width:1.4}
+.mic,.send{
+  width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  outline:none;transition:opacity .2s,transform .12s,background .2s,border-color .2s;
+  /* Prevent double-tap zoom */
+  touch-action:manipulation;
+}
+.mic svg,.send svg{width:15px;height:15px;stroke-width:1.4}
 .mic{background:transparent;border:1px solid var(--border);color:var(--dim)}
-.mic:hover{border-color:var(--border2);color:var(--text)}
+.mic:active{background:var(--border);color:var(--text)}
 .mic.rec{background:#b03030;border-color:#b03030;color:#fff;animation:pr 1.2s ease-in-out infinite}
 .send{background:var(--btn);color:var(--btntxt)}
-.send:hover{opacity:.8}
-.send:active{transform:scale(.93)}
+.send:active{opacity:.7;transform:scale(.92)}
 .send:disabled{opacity:.22;cursor:default;transform:none}
 
 @keyframes pr{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
@@ -67,9 +110,20 @@ canvas{display:block}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 
 /* Settings */
-.ov{position:fixed;inset:0;background:var(--glass);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s;z-index:20}
+.ov{position:fixed;inset:0;background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s;z-index:20}
 .ov.on{opacity:1;pointer-events:all}
-.sp{position:fixed;top:0;right:0;bottom:0;width:320px;background:var(--panel);border-left:1px solid var(--border);padding:20px 18px 24px;transform:translateX(100%);transition:transform .4s cubic-bezier(.22,1,.36,1);z-index:21;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.sp{
+  position:fixed;top:0;right:0;bottom:0;
+  width:min(314px, 90vw);
+  background:var(--panel);border-left:1px solid var(--border);
+  padding:20px 18px;
+  padding-top:calc(20px + var(--sat));
+  padding-bottom:calc(24px + var(--sab));
+  transform:translateX(100%);
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+  z-index:21;display:flex;flex-direction:column;gap:14px;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
 .sp.on{transform:translateX(0)}
 .sp-hd{display:flex;justify-content:space-between;align-items:center}
 .sp-ttl{font-size:8.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
@@ -141,7 +195,12 @@ hr.dv{border:none;border-top:1px solid var(--border)}
   </div>
 </div>
 
-<!-- Settings -->
+<!-- iOS install hint -->
+<div id="install-hint" style="display:none;position:fixed;bottom:calc(80px + var(--sab));left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 16px;font-size:10px;letter-spacing:.08em;color:var(--dim);white-space:nowrap;z-index:30;text-align:center;line-height:1.6">
+  Safari → 分享 → 添加到主屏幕<br>
+  <span style="opacity:.5;font-size:9px">即可全屏无地址栏使用</span>
+</div>
+
 <div class="ov" id="ov"></div>
 <div class="sp" id="sp">
   <div class="sp-hd">
@@ -576,6 +635,15 @@ function stopRec() {
   try { recog?.stop(); } catch(e) {}
 }
 document.getElementById('mb').onclick = () => recOn ? stopRec() : startRec();
+
+// ── iOS install hint ──────────────────────────────────────────────────────────
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.navigator.standalone === true;
+if (isIOS && !isStandalone && !localStorage.getItem('hint-dismissed')) {
+  const hint = document.getElementById('install-hint');
+  setTimeout(() => { hint.style.display = 'block'; }, 2000);
+  hint.addEventListener('click', () => { hint.style.display = 'none'; localStorage.setItem('hint-dismissed','1'); });
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 if (!C.apiKey) setS('Open ⚙ to add API keys');
