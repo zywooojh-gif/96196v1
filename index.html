@@ -150,6 +150,32 @@ hr.dv{border:none;border-top:1px solid var(--border)}
 .savebtn{padding:10px;border-radius:100px;border:none;background:var(--btn);color:var(--btntxt);font-size:9.5px;font-family:'DM Mono',monospace;letter-spacing:.12em;cursor:pointer;transition:opacity .2s;margin-top:auto}
 .savebtn:hover{opacity:.75}
 .snote{font-size:9.5px;color:var(--dim);line-height:1.7}
+/* ── Memory bottom sheet ── */
+.mem-ov{position:fixed;inset:0;background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s;z-index:20}
+.mem-ov.on{opacity:1;pointer-events:all}
+.mem-sheet{position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding-bottom:calc(16px + var(--sab));transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1);z-index:21;display:flex;flex-direction:column;max-height:78vh}
+.mem-sheet.on{transform:translateY(0)}
+.mem-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:12px auto 0;flex-shrink:0}
+.mem-head{display:flex;align-items:center;padding:14px 18px 6px;gap:10px;flex-shrink:0}
+.mem-ttl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);flex:1}
+.mem-upd{font-size:8px;color:var(--dim);opacity:.45;letter-spacing:.05em}
+.mem-intervals{display:flex;gap:5px;padding:8px 18px 10px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.mint{padding:5px 11px;border-radius:100px;border:1px solid var(--border);background:none;color:var(--dim);font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.08em;cursor:pointer;transition:all .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.mint.on{background:var(--border2);color:var(--text);border-color:var(--border2)}
+.mem-list{flex:1;overflow-y:auto;padding:4px 18px;-webkit-overflow-scrolling:touch}
+.mem-empty{font-size:11px;color:var(--dim);text-align:center;padding:28px 0;opacity:.45;letter-spacing:.05em}
+.mem-item{display:flex;align-items:flex-start;gap:8px;padding:10px 0;border-bottom:1px solid var(--border)}
+.mem-item:last-child{border-bottom:none}
+.mem-txt{flex:1;font-size:11.5px;color:var(--text);line-height:1.6;background:none;border:none;outline:none;resize:none;font-family:'DM Mono',monospace;font-weight:300;padding:0;width:100%;caret-color:var(--text);overflow:hidden}
+.mem-del{width:26px;height:26px;border-radius:50%;border:none;background:none;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;touch-action:manipulation;opacity:.6}
+.mem-del:active{opacity:1}
+.mem-add-row{display:flex;align-items:center;gap:8px;padding:10px 18px 4px;border-top:1px solid var(--border);flex-shrink:0}
+.mem-inp{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:'DM Mono',monospace;font-weight:300;letter-spacing:.02em}
+.mem-inp::placeholder{color:var(--dim)}
+.mem-add-btn{width:30px;height:30px;border-radius:50%;border:none;background:var(--btn);color:var(--btntxt);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;touch-action:manipulation;line-height:1}
+/* Persona textarea */
+.fld textarea{background:var(--ibg);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:11px;font-family:'DM Mono',monospace;font-weight:300;outline:none;transition:border-color .2s;width:100%;resize:none;line-height:1.6;min-height:80px}
+.fld textarea:focus{border-color:var(--border2)}
 </style>
 </head>
 <body>
@@ -162,6 +188,9 @@ hr.dv{border:none;border-top:1px solid var(--border)}
     <div class="hbtns">
       <button class="hbtn" id="tbtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <button class="hbtn" id="mbtn" title="Memory">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/><circle cx="18.5" cy="19.5" r="1" fill="currentColor" stroke="none" opacity=".5"/><circle cx="20.5" cy="21.5" r=".6" fill="currentColor" stroke="none" opacity=".35"/></svg>
       </button>
       <button class="hbtn" id="sbtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
@@ -195,6 +224,30 @@ hr.dv{border:none;border-top:1px solid var(--border)}
   </div>
 </div>
 
+<!-- Memory bottom sheet -->
+<div class="mem-ov" id="mem-ov"></div>
+<div class="mem-sheet" id="mem-sheet">
+  <div class="mem-handle"></div>
+  <div class="mem-head">
+    <span class="mem-ttl">Memory</span>
+    <span class="mem-upd" id="mem-upd"></span>
+    <button class="hbtn" id="mem-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="mem-intervals">
+    <button class="mint on" data-v="auto">自动</button>
+    <button class="mint" data-v="5">5 min</button>
+    <button class="mint" data-v="10">10 min</button>
+    <button class="mint" data-v="30">30 min</button>
+  </div>
+  <div class="mem-list" id="mem-list"></div>
+  <div class="mem-add-row">
+    <input class="mem-inp" id="mem-inp" type="text" placeholder="Add a memory manually...">
+    <button class="mem-add-btn" id="mem-add-btn">+</button>
+  </div>
+</div>
+
 <!-- iOS install hint -->
 <div id="install-hint" style="display:none;position:fixed;bottom:calc(80px + var(--sab));left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 16px;font-size:10px;letter-spacing:.08em;color:var(--dim);white-space:nowrap;z-index:30;text-align:center;line-height:1.6">
   Safari → 分享 → 添加到主屏幕<br>
@@ -209,6 +262,13 @@ hr.dv{border:none;border-top:1px solid var(--border)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
+
+  <div class="fld">
+    <label>AI Persona</label>
+    <textarea id="s-persona" placeholder="Describe the AI's personality, tone, name, or role... e.g. Your name is Nova. You are witty, warm, and a little mysterious. You speak like someone who's lived a lot and has great stories."></textarea>
+  </div>
+
+  <hr class="dv">
 
   <!-- Quick presets -->
   <div>
@@ -257,6 +317,14 @@ hr.dv{border:none;border-top:1px solid var(--border)}
     <label>Voice ID</label>
     <input type="text" id="ev" placeholder="jaSvRYaJHY4hCfcE2gCB">
   </div>
+  <div class="fld">
+    <label>TTS Model</label>
+    <select id="etm">
+      <option value="eleven_flash_v2_5">Flash v2.5 — 最快最省积分</option>
+      <option value="eleven_turbo_v2_5">Turbo v2.5 — 速度与质量平衡</option>
+      <option value="eleven_multilingual_v2" selected>Multilingual v2 — 最高质量</option>
+    </select>
+  </div>
 
   <hr class="dv">
 
@@ -298,9 +366,16 @@ const TAU = Math.PI * 2;
 let C = {
   apiUrl: 'https://api.anthropic.com/v1',
   apiKey: '', model: 'claude-sonnet-4-6',
-  elKey: '', voiceId: 'jaSvRYaJHY4hCfcE2gCB',
-  theme: 'night', lang: 'en-US', respLang: 'en-US'
+  elKey: '', voiceId: 'jaSvRYaJHY4hCfcE2gCB', ttsModel: 'eleven_multilingual_v2',
+  theme: 'night', lang: 'en-US', respLang: 'en-US',
+  persona: '', memInterval: 'auto'
 };
+
+// Memories stored separately
+let memories = [];
+try { memories = JSON.parse(localStorage.getItem('yv-mem') || '[]'); } catch(e) {}
+const saveMem = () => { try { localStorage.setItem('yv-mem', JSON.stringify(memories)); } catch(e) {} };
+const memId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
 
 const LANG_NAMES = {
   'en-US': 'English', 'en-GB': 'English',
@@ -333,7 +408,10 @@ function detectFormat(url) {
 function detectLabel(url) {
   if (!url) return { name: '—', fmt: '' };
   for (const [k, v] of Object.entries(PRESETS)) {
-    if (url.startsWith(v.url.split('/v1')[0])) return { name: v.label, fmt: k === 'anthropic' ? 'Anthropic format' : 'OpenAI-compatible' };
+    if (url.startsWith(v.url.split('/v1')[0])) {
+      const fmt = detectFormat(url);
+      return { name: v.label, fmt: fmt === 'anthropic' ? 'Anthropic format' : 'OpenAI-compatible' };
+    }
   }
   const fmt = detectFormat(url);
   return { name: 'Custom', fmt: fmt === 'anthropic' ? 'Anthropic format' : 'OpenAI-compatible' };
@@ -376,8 +454,10 @@ document.getElementById('sbtn').onclick = () => {
   document.getElementById('fm').value = C.model;
   document.getElementById('ek').value = C.elKey;
   document.getElementById('ev').value = C.voiceId;
+  document.getElementById('etm').value = C.ttsModel || 'eleven_multilingual_v2';
   document.getElementById('rl').value = C.lang;
   document.getElementById('rpl').value = C.respLang;
+  document.getElementById('s-persona').value = C.persona || '';
   refreshDetect();
   spEl.classList.add('on'); ovEl.classList.add('on');
 };
@@ -390,8 +470,10 @@ document.getElementById('svb').onclick = () => {
   C.model  = document.getElementById('fm').value.trim();
   C.elKey  = document.getElementById('ek').value.trim();
   C.voiceId = document.getElementById('ev').value.trim() || 'jaSvRYaJHY4hCfcE2gCB';
+  C.ttsModel = document.getElementById('etm').value;
   C.lang   = document.getElementById('rl').value;
   C.respLang = document.getElementById('rpl').value;
+  C.persona = document.getElementById('s-persona').value.trim();
   if (recog) recog.lang = C.lang;
   save(); closeS(); updateBadge(); setS('Saved', 2200);
 };
@@ -477,14 +559,31 @@ let hist = [], busy = false;
 
 function buildSYS() {
   const lang = getLangName(C.respLang || 'en-US');
-  return `You are a warm, thoughtful AI voice companion. You MUST follow these rules without exception:
-1. The "reply" field must contain ONLY ${lang}. Never include any Chinese characters in "reply".
-2. The "chinese" field must contain the Chinese translation of your reply — mandatory, never omit it.
-3. Keep responses concise (2-3 sentences) and natural, as they will be spoken aloud.
-4. Always respond in ${lang} regardless of what language the user speaks.
+  const isAuto = C.memInterval === 'auto';
 
-Respond with ONLY valid JSON, no markdown, no extra text outside the JSON:
-{"reply":"[${lang} only, no Chinese]","chinese":"[Chinese translation only]"}`;
+  let sys = '';
+  if (C.persona && C.persona.trim()) sys += `${C.persona.trim()}\n\n`;
+
+  sys += `You MUST follow these rules:
+1. Always respond in ${lang} only, regardless of what language the user speaks.
+2. The "reply" field must be ${lang} only — no Chinese characters allowed in "reply".
+3. The "chinese" field must always contain a Chinese translation of your reply.
+4. Keep responses to 2-3 sentences, natural and conversational.`;
+
+  if (memories.length > 0) {
+    sys += `\n\nWhat you remember about the user:\n${memories.map(m => `- ${m.content}`).join('\n')}`;
+  }
+
+  if (isAuto) {
+    sys += `\n\nIf the user shares personal info worth remembering (name, preferences, habits, goals), add it to "mem". Otherwise "mem" must be null.
+Reply ONLY with this JSON (no markdown):
+{"reply":"your ${lang} response","chinese":"中文翻译","mem":["fact"] or null}`;
+  } else {
+    sys += `\n\nReply ONLY with this JSON (no markdown):
+{"reply":"your ${lang} response","chinese":"中文翻译"}`;
+  }
+
+  return sys;
 }
 
 async function translateToChinese(text) {
@@ -500,7 +599,7 @@ async function translateToChinese(text) {
       });
       if (!r.ok) return '';
       const d = await r.json();
-      return d.content[0].text.trim();
+      return extractText(d.content).trim();
     } else {
       const r = await fetch(`${C.apiUrl}/chat/completions`, {
         method: 'POST',
@@ -509,7 +608,7 @@ async function translateToChinese(text) {
       });
       if (!r.ok) return '';
       const d = await r.json();
-      return d.choices[0].message.content.trim();
+      return extractText(d.choices).trim();
     }
   } catch(e) { return ''; }
 }
@@ -518,11 +617,26 @@ function parseJ(raw) {
   try {
     const p = JSON.parse(raw.replace(/```json|```/g, '').trim());
     return {
-      reply:   p.reply || p.english || p.response || p.text || raw,
-      chinese: p.chinese || p.translation || p.zh || ''
+      reply:   String(p.reply || p.english || p.response || p.text || raw || ''),
+      chinese: String(p.chinese || p.translation || p.zh || ''),
+      mem:     Array.isArray(p.mem) ? p.mem : null
     };
   }
-  catch(e) { return { reply: raw, chinese: '' }; }
+  catch(e) { return { reply: String(raw || ''), chinese: '', mem: null }; }
+}
+
+// Recursively extract text from any API response structure
+function extractText(obj) {
+  if (!obj) return '';
+  if (typeof obj === 'string') return obj;
+  if (Array.isArray(obj)) {
+    for (const item of obj) { const t = extractText(item); if (t) return t; }
+    return '';
+  }
+  if (typeof obj === 'object') {
+    return obj.text || obj.content || extractText(obj.message) || extractText(obj.choices) || '';
+  }
+  return '';
 }
 
 async function callAI(text) {
@@ -541,11 +655,14 @@ async function callAI(text) {
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
-      body: JSON.stringify({ model: C.model, max_tokens: 512, system: SYS, messages: hist })
+      body: JSON.stringify({ model: C.model, max_tokens: 1024, system: SYS, messages: hist })
     });
-    if (!r.ok) { const e = await r.json().catch(() => {}); throw new Error(e?.error?.message || `HTTP ${r.status}`); }
-    const d = await r.json();
-    const p = parseJ(d.content[0].text);
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d?.error?.message || `HTTP ${r.status}`);
+    // Recursive extraction to handle any nested structure
+    const raw = extractText(d.content) || extractText(d.choices) || '';
+    if (!raw) throw new Error(`content=${JSON.stringify(d.content).slice(0,200)}`);
+    const p = parseJ(raw);
     hist.push({ role: 'assistant', content: p.reply });
     return p;
 
@@ -555,11 +672,13 @@ async function callAI(text) {
     const r = await fetch(`${C.apiUrl}/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${C.apiKey}` },
-      body: JSON.stringify({ model: C.model, max_tokens: 512, messages: msgs })
+      body: JSON.stringify({ model: C.model, max_tokens: 1024, messages: msgs })
     });
-    if (!r.ok) { const e = await r.json().catch(() => {}); throw new Error(e?.error?.message || `HTTP ${r.status}`); }
-    const d = await r.json();
-    const p = parseJ(d.choices[0].message.content);
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d?.error?.message || `HTTP ${r.status}`);
+    const raw = extractText(d.choices) || extractText(d.content) || '';
+    if (!raw) throw new Error(`content=${JSON.stringify(d.choices || d.content).slice(0,200)}`);
+    const p = parseJ(raw);
     hist.push({ role: 'assistant', content: p.reply });
     return p;
   }
@@ -570,7 +689,7 @@ async function callTTS(text) {
   const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${C.voiceId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'xi-api-key': C.elKey },
-    body: JSON.stringify({ text, model_id: 'eleven_multilingual_v2', voice_settings: { stability: .45, similarity_boost: .8, style: .25, use_speaker_boost: true } })
+    body: JSON.stringify({ text, model_id: C.ttsModel || 'eleven_multilingual_v2', voice_settings: { stability: .45, similarity_boost: .8, style: .25, use_speaker_boost: true } })
   });
   if (!r.ok) { const e = await r.json().catch(() => {}); throw new Error(e?.detail?.message || `ElevenLabs ${r.status}`); }
   return await r.blob();
@@ -596,15 +715,22 @@ async function send(text) {
   try {
     setS('<span class="dot">·</span><span class="dot">·</span><span class="dot">·</span>');
     const r = await callAI(text);
-    // Strip any Chinese characters that leaked into reply field
-    r.reply = r.reply.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uff00-\uffef\u3000-\u303f]/g, '').replace(/\s{2,}/g, ' ').trim();
-    // If model forgot Chinese, fetch it separately
-    if (!r.chinese && !isChinese(C.respLang)) {
-      r.chinese = await translateToChinese(r.reply);
+    r.reply = (r.reply || '').replace(/[\u4e00-\u9fff\u3400-\u4dbf\uff00-\uffef\u3000-\u303f]/g, '').replace(/\s{2,}/g, ' ').trim();
+    if (!r.reply) throw new Error('No reply received — check your API settings');
+    if (!r.chinese && !isChinese(C.respLang)) r.chinese = await translateToChinese(r.reply);
+    // Save auto memories
+    if (r.mem && r.mem.length > 0) {
+      r.mem.forEach(content => {
+        if (content && content.trim() && !memories.some(m => m.content === content.trim()))
+          memories.push({ id: memId(), content: content.trim(), ts: Date.now() });
+      });
+      saveMem(); renderMems(); updateMemUpd();
     }
+    // Show text first, then speak
     showSubs(r.reply, r.chinese);
     setS('Speaking...');
-    await playBlob(await callTTS(r.reply)); // TTS only reads reply, never Chinese
+    try { await playBlob(await callTTS(r.reply)); }
+    catch(ttsErr) { setS(ttsErr.message, 4000); }
   } catch(err) { setS(err.message, 5500); console.error(err); }
   document.getElementById('snd').disabled = false; busy = false;
 }
@@ -635,6 +761,133 @@ function stopRec() {
   try { recog?.stop(); } catch(e) {}
 }
 document.getElementById('mb').onclick = () => recOn ? stopRec() : startRec();
+
+// ── Memory module ─────────────────────────────────────────────────────────────
+function renderMems() {
+  const list = document.getElementById('mem-list');
+  if (memories.length === 0) {
+    list.innerHTML = '<div class="mem-empty">No memories yet.<br>Chat a while and they\'ll appear here.</div>';
+    return;
+  }
+  list.innerHTML = memories.map(m => `
+    <div class="mem-item" data-id="${m.id}">
+      <textarea class="mem-txt" rows="1" onchange="editMem('${m.id}',this.value)" oninput="autoH(this)">${m.content}</textarea>
+      <button class="mem-del" onclick="delMem('${m.id}')">×</button>
+    </div>`).join('');
+  list.querySelectorAll('.mem-txt').forEach(t => autoH(t));
+}
+
+function autoH(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+
+function editMem(id, val) {
+  const m = memories.find(x => x.id === id);
+  if (m) { m.content = val.trim(); m.ts = Date.now(); saveMem(); updateMemUpd(); }
+}
+
+function delMem(id) {
+  memories = memories.filter(x => x.id !== id);
+  saveMem(); renderMems(); updateMemUpd();
+}
+
+function addMem(content) {
+  content = content.trim();
+  if (!content || memories.some(m => m.content === content)) return;
+  memories.push({ id: memId(), content, ts: Date.now() });
+  saveMem(); renderMems(); updateMemUpd();
+}
+
+function updateMemUpd() {
+  if (!memories.length) { document.getElementById('mem-upd').textContent = ''; return; }
+  const last = Math.max(...memories.map(m => m.ts));
+  const diff = Math.round((Date.now() - last) / 60000);
+  document.getElementById('mem-upd').textContent = diff < 1 ? 'just now' : diff + ' min ago';
+}
+
+// Memory extraction for timed modes
+async function extractMemories() {
+  if (!C.apiKey || hist.length < 4) return;
+  const recent = hist.slice(-8).map(h => `${h.role}: ${h.content}`).join('\n');
+  const prompt = `Review this conversation and extract important personal facts about the user worth remembering long-term (name, preferences, goals, relationships, habits). Be concise and factual.
+Conversation:
+${recent}
+
+Respond ONLY with JSON: {"mem":["fact1","fact2"]} or {"mem":[]} if nothing worth saving.`;
+
+  try {
+    const fmt = detectFormat(C.apiUrl);
+    let raw = '';
+    if (fmt === 'anthropic') {
+      const r = await fetch(`${C.apiUrl}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': C.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify({ model: C.model, max_tokens: 300, messages: [{ role: 'user', content: prompt }] })
+      });
+      if (!r.ok) return;
+      const d = await r.json(); raw = d.content[0].text;
+    } else {
+      const r = await fetch(`${C.apiUrl}/chat/completions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${C.apiKey}` },
+        body: JSON.stringify({ model: C.model, max_tokens: 300, messages: [{ role: 'user', content: prompt }] })
+      });
+      if (!r.ok) return;
+      const d = await r.json(); raw = d.choices[0].message.content;
+    }
+    const p = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    if (Array.isArray(p.mem) && p.mem.length > 0) {
+      p.mem.forEach(content => {
+        if (content && !memories.some(m => m.content === content.trim())) {
+          memories.push({ id: memId(), content: content.trim(), ts: Date.now() });
+        }
+      });
+      saveMem(); renderMems(); updateMemUpd();
+    }
+  } catch(e) {}
+}
+
+// Interval timer
+let memTimer = null;
+function setupMemTimer() {
+  clearInterval(memTimer);
+  if (C.memInterval === 'auto') return;
+  memTimer = setInterval(extractMemories, parseInt(C.memInterval) * 60 * 1000);
+}
+
+// Memory panel UI
+const memSheet = document.getElementById('mem-sheet');
+const memOv = document.getElementById('mem-ov');
+const openMem = () => { renderMems(); updateMemUpd(); memSheet.classList.add('on'); memOv.classList.add('on'); };
+const closeMem = () => { memSheet.classList.remove('on'); memOv.classList.remove('on'); };
+
+document.getElementById('mbtn').onclick = openMem;
+document.getElementById('mem-close').onclick = closeMem;
+memOv.onclick = closeMem;
+
+// Interval buttons
+document.querySelectorAll('.mint').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.mint').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    C.memInterval = btn.dataset.v;
+    save(); setupMemTimer();
+  };
+});
+
+// Set active interval button from saved config
+document.querySelectorAll('.mint').forEach(b => {
+  b.classList.toggle('on', b.dataset.v === C.memInterval);
+});
+
+// Manual add
+document.getElementById('mem-add-btn').onclick = () => {
+  const inp = document.getElementById('mem-inp');
+  addMem(inp.value); inp.value = '';
+};
+document.getElementById('mem-inp').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { addMem(e.target.value); e.target.value = ''; }
+});
+
+setupMemTimer();
 
 // ── iOS install hint ──────────────────────────────────────────────────────────
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
